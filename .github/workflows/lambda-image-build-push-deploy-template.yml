@@ -16,6 +16,9 @@ on:
       test:
         type: string
         required: false
+    secrets:
+      test:
+        required: true        
 jobs:
 
   lambda-deploy:
