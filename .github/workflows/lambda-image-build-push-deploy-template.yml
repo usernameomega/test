@@ -28,4 +28,6 @@ jobs:
 
       - name: Update Lambda code & environment variables
         run: |
-          "Variables={${{ inputs.lambda-envs }}"
+          "Variables={${{ inputs.app }}}"
+          "Variables={${{ inputs.lambda-envs }}}"
+          
