@@ -28,4 +28,4 @@ jobs:
 
       - name: Update Lambda code & environment variables
         run: |       
-         echo  "Variables={${{ github.event.inputs.lambda-envs }}}"
+         echo  "Variables={${{ inputs.lambda-envs }}}"
