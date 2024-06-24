@@ -13,12 +13,7 @@ on:
       lambda-envs:
         type: string
         required: false
-      test:
-        type: string
-        required: false
-    secrets:
-      test:
-        required: true        
+   
 jobs:
 
   lambda-deploy:
@@ -32,5 +27,4 @@ jobs:
 
       - name: Update Lambda code & environment variables
         run: |
-          "Variables={${{ secrets.test }}}"
-          "Variables={${{ inputs.lambda-envs }}}"
+         echo  "Variables={${{ inputs.lambda-envs }}}"
