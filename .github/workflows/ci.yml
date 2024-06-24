@@ -1,0 +1,15 @@
+name: DEV Build/Push/Lambda-deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  cognito-customize-email-lambda:
+    uses: ./.github/workflows/lambda-image-build-push-deploy-template.yml
+    with:
+      app: 'cognito-customize-email-lambda'
+      environment: 'development'
+      lambda-envs: "VAR1=${{ vars.VAR1 }},VAR2=${{ vars.VAR2 }}"
