@@ -19,7 +19,6 @@ jobs:
   lambda-deploy:
 
     runs-on: ubuntu-latest
-    env:
      
     environment:
       name: ${{ inputs.environment }}
