@@ -28,4 +28,5 @@ jobs:
       - name: Update Lambda code & environment variables
         run: |
          env
-         echo  "Variables={${{ inputs.lambda-envs }}}"
+         
+        # echo  "Variables={${{ inputs.lambda-envs }}}"
