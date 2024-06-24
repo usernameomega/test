@@ -12,4 +12,4 @@ jobs:
     with:
       app: 'cognito-customize-email-lambda'
       environment: 'development'
-      lambda-envs: "VAR1=${{ secrets.VAR1 }},VAR2=${{ secrets.VAR2 }}"
+      lambda-envs: "VAR1=${{ vars.VAR1 }},VAR2=${{ vars.VAR2 }}"
