@@ -16,7 +16,7 @@ jobs:
   cognito-customize-email-lambda-deploy:
     runs-on: ubuntu-latest
     env:
-      APP: cognito-customize-email-lambda
+      app: cognito-customize-email-lambda
     environment:
       name: development
     needs: cognito-customize-email-lambda-build
@@ -26,4 +26,4 @@ jobs:
         uses: actions/checkout@v4
       - name: Update cognito-customize-email-lambda
         run: | 
-         echo ${{env.APP}}   
+         echo ${{env.app}}   
