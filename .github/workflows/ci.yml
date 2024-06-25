@@ -4,8 +4,8 @@ on:
   push:
     paths:
       - 'lambdas/**'
-      - './.github/workflows/ci.yml'
-      - './.github/workflows/lambda-image-build-push-template.yml'
+      - '.github/workflows/ci.yml'
+      - '.github/workflows/lambda-image-build-push-template.yml'
 
 jobs:
 
