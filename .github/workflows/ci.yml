@@ -12,8 +12,7 @@ jobs:
     with:
       app: 'cognito-customize-email-lambda'
       environment: 'development'
-      lambda-envs: "VAR1=${{ vars.VAR1 }},VAR2=${{ vars.VAR2 }}"
-      envs-name: 'COGNITO_CUSTOMIZE_EMAIL_LAMBDA'
+      lambda-envs: '${{ vars.COGNITO_CUSTOMIZE_EMAIL_LAMBDA }}'
 
   lambda-deploy:
 
