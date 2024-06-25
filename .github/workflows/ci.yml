@@ -26,4 +26,4 @@ jobs:
         uses: actions/checkout@v4
       - name: Update cognito-customize-email-lambda
         run: | 
-         echo ${{env.app}}   
+         echo $(git rev-parse --short HEAD)"   
