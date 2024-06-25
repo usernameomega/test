@@ -24,5 +24,7 @@ jobs:
 
       - name: BUILD ${{ inputs.app }}
         run: | 
-          ls -l
+         export ENVS=\
+         VAR1=${{ vars.VAR1 }},\
+         VAR2=${{ vars.VAR2 }}
 
