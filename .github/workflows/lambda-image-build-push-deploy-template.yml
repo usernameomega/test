@@ -33,4 +33,4 @@ jobs:
         run: |    
          echo ${{ vars.VAR1 }}
          echo ${{ inputs.test }}
-         echo  "Variables={${{ inputs.lambda-envs }}}"
+         echo  "Variables={${{ vars.VAR1 }}}"
