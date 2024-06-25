@@ -30,7 +30,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update Lambda code & environment variables
-        run: |       
+        run: |    
+         env
          echo ${{ vars.VAR1 }}
          echo ${{ inputs.test }}
          echo  "Variables={${{ inputs.lambda-envs }}}"
