@@ -13,43 +13,21 @@ jobs:
       app: 'cognito-customize-email-lambda'
       environment: 'development'
 
-  cognito-customize-test-lambda-build:
-    uses: ./.github/workflows/lambda-image-build-push-deploy-template.yml
-    with:
-      app: 'cognito-test2-lambda'
-      environment: 'development'
+  cognito-customize-email-lambda-deploy:
+    env:
+      app: 'cognito-customize-email-lambda'
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+    needs: cognito-customize-email-lambda-build
 
-  # cognito-customize-email-lambda-deploy:
-
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: ${{ inputs.environment }}
-  #   needs: cognito-customize-email-lambda-build
-
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-  #     - name: Update cognito-customize-email-lambda
-  #       run: | 
-  #        export ENVS=\
-  #        VAR1=${{ vars.VAR1 }},\
-  #        VAR2=${{ vars.VAR2 }}
-  #        echo $ENVS        
-
-  # cognito-customize-test-lambda-deploy:
-
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: ${{ inputs.environment }}
-  #   needs: cognito-customize-test-lambda-build
-
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-  #     - name: Update cognito-customize-test-lambda
-  #       run: | 
-  #        export ENVS=\
-  #        VAR1=${{ vars.VAR1 }},\
-  #        VAR3=${{ vars.VAR1 }},\
-  #        VAR2=${{ vars.VAR2 }}
-  #        echo $ENVS         
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Update cognito-customize-email-lambda
+        run: | 
+         export ${{ env.app }}
+         export ENVS=\
+         VAR1=${{ vars.VAR1 }},\
+         VAR2=${{ vars.VAR2 }}
+         echo $ENVS        
