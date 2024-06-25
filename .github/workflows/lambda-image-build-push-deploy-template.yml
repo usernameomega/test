@@ -28,3 +28,11 @@ jobs:
          VAR1=${{ vars.VAR1 }},\
          VAR2=${{ vars.VAR2 }}
          echo $ENVS
+
+      - name: Update Lambda ${{ inputs.app }}
+        run: | 
+         export ENVS=\
+         VAR1=${{ vars.VAR1 }},\
+         VAR2=${{ vars.VAR2 }},\
+         VAR3=${{ vars.VAR2 }},
+         echo $ENVS
