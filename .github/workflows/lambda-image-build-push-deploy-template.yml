@@ -25,18 +25,3 @@ jobs:
         run: | 
          ls -l
 
-  Deploy:
-    runs-on: ubuntu-latest
-    needs: Build
-    environment:
-      name: ${{ inputs.environment }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: BUILD ${{ inputs.app }}
-        run: | 
-         export ENVS=\
-         VAR1=${{ vars.VAR1 }},\
-         VAR2=${{ vars.VAR2 }}
-
