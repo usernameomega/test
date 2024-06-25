@@ -26,5 +26,5 @@ jobs:
         uses: actions/checkout@v4
       - name: Update cognito-customize-email-lambda
         run: | 
-         echo "docker_image_tag=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+         echo "docker_image_tag=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
          env
