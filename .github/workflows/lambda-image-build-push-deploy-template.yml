@@ -1,4 +1,4 @@
-name: 'Template For Docker Build, ECR Push And Deploy Lambda'
+oname: 'Template For Docker Build, ECR Push And Deploy Lambda'
 
 on:
   workflow_call:
@@ -19,17 +19,17 @@ on:
    
 jobs:
 
-  lambda-deploy:
+  Update-deploy:
 
     runs-on: ubuntu-latest
-     
+    needs: lambda-deploy
     environment:
       name: ${{ inputs.environment }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Update Lambda code & environment variables
+      - name: Update-deploy
         run: |    
          echo ${{ vars.VAR1 }}
          echo ${{ inputs.test }}
