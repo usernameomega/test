@@ -13,9 +13,21 @@ on:
    
 jobs:
 
-  DOCKER-BUILD:
-
+  Build:
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: BUILD ${{ inputs.app }}
+        run: | 
+         ls -l
+
+  Deploy:
+    runs-on: ubuntu-latest
+    needs: Build
     environment:
       name: ${{ inputs.environment }}
     steps:
