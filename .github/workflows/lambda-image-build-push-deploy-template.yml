@@ -31,7 +31,6 @@ jobs:
 
       - name: Update Lambda code & environment variables
         run: |    
-         env
          echo ${{ vars.VAR1 }}
          echo ${{ inputs.test }}
          echo  "Variables={${{ inputs.lambda-envs }}}"
