@@ -16,7 +16,7 @@ jobs:
   cognito-customize-email-lambda-deploy:
     runs-on: ubuntu-latest
     env:
-      APP: Monday
+      APP: cognito-customize-email-lambda
     environment:
       name: development
     needs: cognito-customize-email-lambda-build
