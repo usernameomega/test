@@ -27,7 +27,7 @@ jobs:
       - name: Update cognito-customize-email-lambda
         run: | 
           export LAMBDA_ENVS="{\
-            VAR1=${{ vars.VAR1 }},\
-            VAR2=${{ vars.VAR2 }},\
-            }"
+          VAR1=${{ vars.VAR1 }},\
+          VAR2=${{ vars.VAR2 }},\
+          }"
           echo "Variables=$LAMBDA_ENVS"
