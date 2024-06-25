@@ -18,7 +18,7 @@ jobs:
   lambda-deploy:
 
     runs-on: ubuntu-latest
-    needs: job1
+    needs: cognito-customize-email-lambda
     environment:
       name: development
     steps:
