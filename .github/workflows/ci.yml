@@ -26,5 +26,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Update cognito-customize-email-lambda
         run: | 
-         export TAG=$(git rev-parse --short HEAD) 
-         echo $TAG
+          export LAMBDA_ENVS=\  
+            VAR1=${{ vars.VAR1 }},\
+            VAR2=${{ vars.VAR2 }}
+          echo { $LAMBDA_ENVS }  
