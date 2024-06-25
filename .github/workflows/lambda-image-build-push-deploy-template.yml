@@ -1,4 +1,4 @@
-oname: 'Template For Docker Build, ECR Push And Deploy Lambda'
+name: 'Template For Docker Build, ECR Push And Deploy Lambda'
 
 on:
   workflow_call:
