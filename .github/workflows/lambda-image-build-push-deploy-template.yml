@@ -10,12 +10,6 @@ on:
       app:
         type: string
         required: false
-      lambda-envs:
-        type: string
-        required: false
-      test:
-        type: string
-        required: false
    
 jobs:
 
@@ -28,8 +22,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Update-deploy
-        run: |    
-         echo ${{ vars.VAR1 }}
-         echo ${{ inputs.test }}
-         echo ${{ inputs.lambda-envs }} 
+      - name: Update Lambda ${{ inputs.app }}
+        run: | 
+         export ENVS=\
+         VAR1=${{ vars.VAR1 }},\
+         VAR2=${{ vars.VAR2 }}
+         echo $ENVS
