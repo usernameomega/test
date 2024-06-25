@@ -32,4 +32,4 @@ jobs:
         run: |    
          echo ${{ vars.VAR1 }}
          echo ${{ inputs.test }}
-         echo ${{ vars.${{ inputs.envs-name }} }}  
+         echo ${{ vars."${{ inputs.envs-name }}" }}  
