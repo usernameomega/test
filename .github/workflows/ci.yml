@@ -33,3 +33,4 @@ jobs:
             VAR2=${{ vars.VAR2 }}\
             }"
           echo "Variables=$LAMBDA_ENVS"
+          ls -l
