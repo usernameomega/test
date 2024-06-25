@@ -12,3 +12,9 @@ jobs:
     with:
       app: 'cognito-customize-email-lambda'
       environment: 'development'
+
+  cognito-test2-lambda:
+    uses: ./.github/workflows/lambda-image-build-push-deploy-template.yml
+    with:
+      app: 'cognito-test2-lambda'
+      environment: 'development'
