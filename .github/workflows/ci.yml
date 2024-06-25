@@ -19,7 +19,7 @@ jobs:
 
     runs-on: ubuntu-latest
     environment:
-      name: ${{ vars.ENVIRONMENT }}
+      name: development
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
