@@ -14,11 +14,9 @@ jobs:
       environment: 'development'
 
   cognito-customize-email-lambda-deploy:
-    env:
-      APP: 'cognito-customize-email-lambda'
     runs-on: ubuntu-latest
     environment:
-      name: ${{ inputs.environment }}
+      name: development
     needs: cognito-customize-email-lambda-build
 
     steps:
@@ -26,8 +24,4 @@ jobs:
         uses: actions/checkout@v4
       - name: Update cognito-customize-email-lambda
         run: | 
-         export $APP
-         export ENVS=\
-         VAR1=${{ vars.VAR1 }},\
-         VAR2=${{ vars.VAR2 }}
-         echo $ENVS        
+         export ${{env.APP}}   
