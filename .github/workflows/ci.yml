@@ -2,6 +2,8 @@ name: DEV Build/Push/Lambda-deploy
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'lambdas/**'
       - '.github/workflows/ci.yml'
