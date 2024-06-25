@@ -8,6 +8,8 @@ on:
 jobs:
 
   cognito-customize-email-lambda:
+    environment:
+      name: dev
     uses: ./.github/workflows/lambda-image-build-push-deploy-template.yml
     with:
       app: 'cognito-customize-email-lambda'
