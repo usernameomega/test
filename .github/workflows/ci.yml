@@ -4,18 +4,8 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'lambdas/**'
-      - '.github/workflows/ci.yml'
-      - '.github/workflows/lambda-image-build-push-template.yml'
-
 jobs:
 
-  # cognito-customize-email-lambda-build:
-  #   uses: ./.github/workflows/lambda-image-build-push-deploy-template.yml
-  #   with:
-  #     app: 'cognito-customize-email-lambda'
-  #     environment: 'development'
 
   cognito-customize-email-lambda-deploy:
     runs-on: ubuntu-latest
@@ -28,13 +18,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Update cognito-customize-email-lambda
+      - name: Export
         run: | 
           export DATABASE_URL=postgresql://dbo:HayXBUtEKffcG6FVEoiVDpIH4kHjXaan@che-dev-transaction-gateway.cgz7qeu1xtvk.eu-central-2.rds.amazonaws.com:5432/devtransactiongateway?schema=public
 
-      - name: Create Helm Secret Files
+      - name: CAT
         run: |
-          yq e --null-input ".secrets = {\"transaction-gateway-api-secret\": {\"data\": strenv(DATABASE_URL)}}" \
+          SECRET_VAR="VAULTS_SECRETS_$DATABASE_URL"
+          export SECRET_DATA=$(env | sed -n "s/^${SECRET_VAR}\(.*\)=\(.*\)/\1: \2/p")
+          yq e --null-input ".secrets = {\"transaction-gateway-${{ inputs.app }}-secret\": {\"data\": strenv(SECRET_DATA)}}" \
           > "secrets.transaction-gateway-api.yaml"
           cat secrets.transaction-gateway-api.yaml
         shell: bash
