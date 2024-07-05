@@ -25,7 +25,7 @@ jobs:
       - name: CAT
         run: |
           SECRET_VAR="VAULTS_SECRETS_API"
-          export SECRET_DATA=$(env | grep "$SECRET_VAR" | sed 's/\=/\:\ /1; s/$SECRET_VAR//' )
+          export SECRET_DATA=$(env | grep "$SECRET_VAR" | sed 's/\=/\:\ /1; s/"$SECRET_VAR"//' )
           yq e --null-input ".secrets = {\"transaction-gateway-api-secret\": {\"data\": strenv(SECRET_DATA)}}" \
           > "secrets.transaction-gateway-api.yaml"
           cat secrets.transaction-gateway-api.yaml
