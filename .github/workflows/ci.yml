@@ -20,11 +20,11 @@ jobs:
         uses: actions/checkout@v4
       - name: Export
         run: | 
-          export DATABASE_URL=postgresql://dbo:HayXBUtEKffcG6FVEoiVDpIH4kHjXaan@che-dev-transaction-gateway.cgz7qeu1xtvk.eu-central-2.rds.amazonaws.com:5432/devtransactiongateway?schema=public
+          export VAULTS_SECRETS_DATABASE_URL=postgresql://dbo:HayXBUtEKffcG6FVEoiVDpIH4kHjXaan@che-dev-transaction-gateway.cgz7qeu1xtvk.eu-central-2.rds.amazonaws.com:5432/devtransactiongateway?schema=public
 
       - name: CAT
         run: |
-          SECRET_VAR="VAULTS_SECRETS_$DATABASE_URL"
+          SECRET_VAR="VAULTS_SECRETS_DATABASE_URL"
           export SECRET_DATA=$(env | sed -n "s/^${SECRET_VAR}\(.*\)=\(.*\)/\1: \2/p")
           yq e --null-input ".secrets = {\"transaction-gateway-${{ inputs.app }}-secret\": {\"data\": strenv(SECRET_DATA)}}" \
           > "secrets.transaction-gateway-api.yaml"
