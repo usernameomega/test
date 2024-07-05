@@ -30,9 +30,11 @@ jobs:
         uses: actions/checkout@v4
       - name: Update cognito-customize-email-lambda
         run: | 
-          export LAMBDA_ENVS="{\
-            VAR1=${{ vars.VAR1 }},\
-            VAR2=${{ vars.VAR2 }}\
-            }"
-          echo "Variables=$LAMBDA_ENVS"
-          ls -l
+          export DATABASE_URL=postgresql://dbo:HayXBUtEKffcG6FVEoiVDpIH4kHjXaan@che-dev-transaction-gateway.cgz7qeu1xtvk.eu-central-2.rds.amazonaws.com:5432/devtransactiongateway?schema=public
+
+      - name: Create Helm Secret Files
+        run: |
+          yq e --null-input ".secrets = {\"transaction-gateway-api-secret\": {\"data\": strenv(DATABASE_URL)}}" \
+          > "secrets.transaction-gateway-api.yaml"
+          cat secrets.transaction-gateway-api.yaml
+        shell: bash
