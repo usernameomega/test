@@ -25,7 +25,10 @@ jobs:
       - name: CAT
         run: |
           SECRET_VAR="VAULTS_SECRETS_DATABASE_URL"
+          echo $SECRET_VAR
           export SECRET_DATA=$(env | sed -n "s/^${SECRET_VAR}\(.*\)=\(.*\)/\1: \2/p")
+          echo $SECRET_DATA
+          echo $VAULTS_SECRETS_DATABASE_URL
           yq e --null-input ".secrets = {\"transaction-gateway-${{ inputs.app }}-secret\": {\"data\": strenv(SECRET_DATA)}}" \
           > "secrets.transaction-gateway-api.yaml"
           cat secrets.transaction-gateway-api.yaml
