@@ -10,7 +10,8 @@ jobs:
   cognito-customize-email-lambda-deploy:
     runs-on: ubuntu-latest
     env:
-      VAULTS_SECRETS_APIDATABASE_URL: po
+      VAULTS_SECRETS_APIDATABASE_URL: test
+      VAULTS_SECRETS_APIDATABASE_URL2: postgresql://dbo:HayXBUtEKffcG6FVEoiVDpIH4kHjXaan@che-dev-transaction-gateway.cgz7qeu1xtvk.eu-central-2.rds.amazonaws.com:5432/devtransactiongateway?schema=public
     environment:
       name: development
     # needs: cognito-customize-email-lambda-build
@@ -24,7 +25,7 @@ jobs:
       - name: CAT
         run: |
           SECRET_VAR="VAULTS_SECRETS_API"
-          export SECRET_DATA=$(env | sed -n "s/^${SECRET_VAR}\(.*\)=\(.*\)/\1: \2/p")
+          export SECRET_DATA=$(env | grep "$VAULTS_SECRETS_DATABASE_URL" | sed 's/\=/\:\ /1' )
           yq e --null-input ".secrets = {\"transaction-gateway-api-secret\": {\"data\": strenv(SECRET_DATA)}}" \
           > "secrets.transaction-gateway-api.yaml"
           cat secrets.transaction-gateway-api.yaml
