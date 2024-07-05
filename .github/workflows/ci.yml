@@ -10,7 +10,7 @@ jobs:
   cognito-customize-email-lambda-deploy:
     runs-on: ubuntu-latest
     env:
-      app: cognito-customize-email-lambda
+      VAULTS_SECRETS_APIDATABASE_URL: po
     environment:
       name: development
     # needs: cognito-customize-email-lambda-build
@@ -18,9 +18,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Export
-        run: | 
-         export VAULTS_SECRETS_APIDATABASE_URL=po
+      # - name: Export
+      #   run: | 
+      #    export VAULTS_SECRETS_APIDATABASE_URL=po
       - name: CAT
         run: |
           SECRET_VAR="VAULTS_SECRETS_API"
