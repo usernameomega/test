@@ -27,8 +27,8 @@ jobs:
 
       - name: Check ENV
         run: |
-          echo 123 >> /.env
-          echo 122133 >> /.env
+          echo 123 >> ./.env
+          echo 122133 >> ./.env
 
       - name: Build And Push
         uses: docker/build-push-action@v5
