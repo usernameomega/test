@@ -28,6 +28,8 @@ jobs:
       - name: Check ENV
         run: |
           echo ${{ secrets.NEXT_PUBLIC_APP_URL }} > .env
+          echo 123 > .env
+          echo 122133 > .env
 
       - name: Build And Push
         uses: docker/build-push-action@v5
