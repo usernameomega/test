@@ -25,6 +25,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Check ENV
+        run: |
+          echo ${{ secrets.NEXT_PUBLIC_APP_URL }} > .env
+
       - name: Build And Push
         uses: docker/build-push-action@v5
         with:
@@ -32,9 +36,7 @@ jobs:
           push: false
           tags: |
             nginx:latest
-        run: |
-          echo ${{ secrets.NEXT_PUBLIC_APP_URL }} > .env
-          
+
       - name: Check ENV
         run: |
           cat .env
