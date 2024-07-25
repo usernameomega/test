@@ -27,7 +27,7 @@ jobs:
 
       - name: Check ENV
         run: |
-          echo ${{ secrets.NEXT_PUBLIC_APP_URL }} >> .env
+          touch .env
           echo 123 >> .env
           echo 122133 >> .env
 
