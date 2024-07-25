@@ -29,6 +29,7 @@ jobs:
         run: |
           echo 123 >> ./.env
           echo 122133 >> ./.env
+          ls -l
 
 #      - name: Build And Push
 #        uses: docker/build-push-action@v5
