@@ -41,4 +41,4 @@ jobs:
 
       - name: Check ENV
         run: |
-          cat .env
+          ls -l
