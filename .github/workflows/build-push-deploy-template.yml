@@ -29,7 +29,6 @@ jobs:
         run: |
           echo 123 >> ./.env
           echo 122133 >> ./.env
-          ls -l
 
 #      - name: Build And Push
 #        uses: docker/build-push-action@v5
@@ -41,4 +40,5 @@ jobs:
 
       - name: Check ENV
         run: |
-          ls -l
+          cp ./.env ./.env2
+          cat ./.env2
