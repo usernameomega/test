@@ -30,13 +30,14 @@ jobs:
           echo 123 >> ./.env
           echo 122133 >> ./.env
 
-#      - name: Build And Push
-#        uses: docker/build-push-action@v5
-#        with:
-#          file: ./docker/Dockerfile
-#          push: false
-#          tags: |
-#            nginx:latest
+      - name: Build And Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: false
+          tags: |
+            nginx:latest
 
       - name: Check ENV
         run: |
