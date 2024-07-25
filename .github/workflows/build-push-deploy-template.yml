@@ -1,0 +1,40 @@
+name: 'Template For Docker Build, ECR Push And Helm Deploy Actions'
+
+on:
+  workflow_call:
+
+    inputs:
+      environment:
+        type: string
+        required: true
+    secrets:
+      NEXT_PUBLIC_APP_URL:
+        required: false
+      NEXT_PUBLIC_API_URL:
+        required: false
+
+jobs:
+
+  docker-build-and-push:
+
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build And Push
+        uses: docker/build-push-action@v5
+        with:
+          file: ./docker/Dockerfile
+          push: false
+          tags: |
+            nginx:latest
+        run: |
+          echo ${{ secrets.NEXT_PUBLIC_APP_URL }} > .env
+          
+      - name: Check ENV
+        run: |
+          cat .env

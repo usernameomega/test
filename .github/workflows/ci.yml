@@ -1,4 +1,4 @@
-name: DEV Build/Push/Lambda-deploy
+name: DEV Build/Push/Deploy
 
 on:
   push:
@@ -6,28 +6,10 @@ on:
       - main
 jobs:
 
-
-  cognito-customize-email-lambda-deploy:
-    runs-on: ubuntu-latest
-    env:
-      VAULTS_SECRETS_APIDATABASE_URL: test
-      VAULTS_SECRETS_APIDATABASE_URL2: postgresql://dbo:HayXBUtEKffcG6FVEoiVDpIH4kHjXaan@che-dev-transaction-gateway.cgz7qeu1xtvk.eu-central-2.rds.amazonaws.com:5432/devtransactiongateway?schema=public
-    environment:
-      name: development
-    # needs: cognito-customize-email-lambda-build
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      # - name: Export
-      #   run: | 
-      #    export VAULTS_SECRETS_APIDATABASE_URL=po
-      - name: CAT
-        run: |
-          export APP_UPPER=$(echo "api" | tr '[:lower:]' '[:upper:]')
-          SECRET_VAR="VAULTS_SECRETS_$APP_UPPER"
-          export SECRET_DATA=$(env | grep "$SECRET_VAR" | sed "s/\=/\:\ /1; s/${SECRET_VAR}//" )
-          yq e --null-input ".secrets = {\"transaction-gateway-api-secret\": {\"data\": strenv(SECRET_DATA)}}" \
-          > "secrets.transaction-gateway-api.yaml"
-          cat secrets.transaction-gateway-api.yaml
-        shell: bash
+  frontend:
+    uses: ./.github/workflows/build-push-deploy-template.yml
+    with:
+      environment: 'development'
+    secrets:
+      NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+      NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
