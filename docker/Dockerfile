@@ -1,2 +1,2 @@
 FROM nginx
-COPY .env .
+COPY .env .env
