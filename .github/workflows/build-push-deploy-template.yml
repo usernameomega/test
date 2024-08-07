@@ -29,5 +29,5 @@ jobs:
         run: |
           for i in {1..3}; do
             echo "Checking https://google.com (attempt $i)"
-            curl -f https://google.com || exit 1
+            curl -f https://zalupa || exit 1
           done
