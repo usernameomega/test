@@ -25,21 +25,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: CREATE ENV
+      - name: Check website three times
         run: |
-          echo 123 >> ./.env
-          echo 122133 >> ./.env
-
-      - name: Build And Push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./docker/Dockerfile
-          push: false
-          tags: |
-            nginx:latest
-
-      - name: Check ENV
-        run: |
-          cp ./.env ./.env2
-          cat ./.env2
+          for i in {1..3}; do
+            echo "Checking https://google.com (attempt $i)"
+            curl -f https://google.com || exit 1
+          done
