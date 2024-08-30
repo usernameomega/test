@@ -3,9 +3,12 @@ name: Production Workflow
 on:
   push:
     branches:
-      - main666
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   deploy-to-production:
@@ -23,3 +26,28 @@ jobs:
       TS_OAUTH_SECRET: ${{ secrets.TS_OAUTH_SECRET }}
       EKS_ENDPOINT: ${{ secrets.EKS_ENDPOINT }}
       EKS_SA_SECRET: ${{ secrets.EKS_SA_SECRET }}
+
+  deploy-to-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Build Pages
+        run: npx @redocly/cli build-docs ./docs/openapi-v1.0.1.yaml -o ./docs/index.html
+
+      - name: Deploy to GitHub Pages
+        uses: actions/configure-pages@v3
+
+      - name: Deploy to GitHub Pages
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: './docs/'
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v2
