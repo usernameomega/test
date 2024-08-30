@@ -1,0 +1,98 @@
+generic:
+  extraVolumes: []
+  extraImagePullSecrets:
+    - name: ecr-pull-dev-identity-service
+  usePredefinedAffinity: true
+
+podAffinityPreset: soft
+
+podAntiAffinityPreset: soft
+
+nodeAffinityPreset:
+  type: ""
+  key: ""
+  values: []
+
+releasePrefix: "-"
+
+diagnosticMode:
+  enabled: false
+  command: ["sleep"]
+  args: ["infinity"]
+
+defaultImage: ""
+defaultImageTag: "latest"
+defaultImagePullPolicy: "IfNotPresent"
+ingressHostname: ""
+
+ingresses:
+  identity-service:
+    ingressClassName: alb
+    annotations:
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+      external-dns.alpha.kubernetes.io/hostname: '{{ $.Values.ingressHostname }}'
+    hosts:
+      - hostname: '{{ $.Values.ingressHostname }}'
+        paths:
+          - serviceName: identity-service
+            servicePort: http
+            path: /
+
+services:
+  identity-service:
+    type: NodePort
+    ports:
+      - name: http
+        protocol: TCP
+        port: 80
+        targetPort: 3000
+        nodePort:
+    extraSelectorLabels:
+      app/name: identity-service
+
+deployments:
+  identity-service:
+    podLabels:
+      app/name: identity-service
+    podAnnotations:
+      checksum/upgrade-date: "Updated at {{ now | toString }}"
+    replicas: 1
+    containers:
+      - name: identity-service
+        imagePullPolicy: IfNotPresent
+        ports:
+          - name: http
+            containerPort: 3000
+            protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#            initialDelaySeconds: 30
+#            periodSeconds: 15
+#            timeoutSeconds: 10
+#            successThreshold: 1
+#            failureThreshold: 5
+#          readinessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#            initialDelaySeconds: 30
+#            periodSeconds: 5
+#            timeoutSeconds: 3
+#            successThreshold: 1
+#            failureThreshold: 3
+        envSecrets:
+          - identity-service-secret
+
+secrets:
+  identity-service-secret:
+    data:

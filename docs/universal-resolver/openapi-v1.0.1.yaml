@@ -1,0 +1,467 @@
+openapi: 3.1.0
+info:
+  title: Universal Resolver
+  contact:
+    name: Support
+    email: identity@hashgraph-group.com
+  termsOfService: https://hashgraph-association.com/
+  version: 1.0.1
+servers:
+  - url: https://identity-service.dev.hashgraph-group.com/universal-resolver
+    description: development
+  - url: https://identity-service.prod.hashgraph-group.com/universal-resolver
+    description: production
+  - url: /universal-resolver
+tags:
+  - name: Universal Resolver
+    description: >
+      The Universal Resolver enables the resolution of many different types
+      ("methods") of [Decentralized Identifiers
+      (DIDs)](https://www.w3.org/TR/did-core/), using a common interface. It
+      offers an HTTP(S) binding to the DID Resolution function, which is defined
+      in the W3C CCG's [DID
+      Resolution](https://w3c-ccg.github.io/did-resolution/) specification. The
+      Universal Resolver can return DID documents in various representations
+      (JSON, JSON-LD, CBOR), as well as full DID resolution results (DID
+      documents plus metadata). Besides resolving DIDs, another supported
+      function is dereferencing DID URLs, including support for various
+      parameters and fragments.
+
+      ## Resolve a DID
+
+      When resolving DIDs, the input is a DID plus resolution options, and the
+      output is the DID document plus metadata.
+
+      ### Example 1: Full DID resolution result
+
+      A request without an `Accept` header (default value) will return the full
+      DID resolution result (DID document plus metadata):
+
+      ```sh
+        curl -X GET "https://identity-service.dev.hashgraph-group.com/universal-resolver/identifiers/did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790"
+      ```
+
+      A request with an `Accept` header set to
+      `application/ld+json;profile="https://w3id.org/did-resolution"` will also
+      return the full DID resolution result (DID document plus metadata):
+
+      ```sh
+        curl -H "Accept: application/ld+json;profile=\"https://w3id.org/did-resolution\"" \
+          -X GET "https://identity-service.dev.hashgraph-group.com/universal-resolver/identifiers/did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790"
+      ```
+
+      ### Example 2: Only DID document, in JSON-LD
+
+      A request with an `Accept` header set to `application/did+ld+json` will
+      return only the DID document in the JSON-LD representation:
+
+      ```sh
+        curl -H "Accept: application/did+ld+json" \
+          -X GET "https://identity-service.dev.hashgraph-group.com/universal-resolver/identifiers/did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790"
+      ```
+
+      ### Example 3: Only DID document, in CBOR
+
+      A request with an `Accept` header set to `application/did+cbor` will
+      return only the DID document in the CBOR representation:
+
+      ```sh
+        curl -H "Accept: application/did+cbor" \
+          -X GET "https://identity-service.dev.hashgraph-group.com/universal-resolver/identifiers/did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790"
+      ```
+      
+      The result is a DID document encoded in hexadecimal CBOR:
+
+      ```sh
+        A373646964446F63756D656E744D65746164617461A36976657273696F6E49646D3137313634363638373733343867637265617465647818323032342D30352D32335431313A35383A30302E3034355A67757064617465647818323032342D30352D32335431323A32313A31372E3334385A756469645265736F6C7574696F6E4D65746164617461A16B636F6E74656E7454797065776170706C69636174696F6E2F6469642B6C642B6A736F6E6B646964446F63756D656E74A66840636F6E74657874781C68747470733A2F2F7777772E77332E6F72672F6E732F6469642F7631626964784C6469643A6865646572613A746573746E65743A7A3862724C44534D7542795759716431413779556861694C3854324C4B637865556469684434476D48647A61725F302E302E343338383739306A636F6E74726F6C6C657278506469643A6865646572613A746573746E65743A7A364D6B6755763543766A52503641737645597153524E37646A423670347A4B3962634D5139336735794B365464374E5F302E302E323936313333323772766572696669636174696F6E4D6574686F6481A462696478596469643A6865646572613A746573746E65743A7A3862724C44534D7542795759716431413779556861694C3854324C4B637865556469684434476D48647A61725F302E302E34333838373930236469642D726F6F742D6B65796474797065781A45643235353139566572696669636174696F6E4B6579323031386A636F6E74726F6C6C657278506469643A6865646572613A746573746E65743A7A364D6B6755763543766A52503641737645597153524E37646A423670347A4B3962634D5139336735794B365464374E5F302E302E32393631333332376F7075626C69634B6579426173653538782C4241454D47334E574A6B7439414A64456B74724176586B6F335050515061684A58356D79556F33664B4861456F617373657274696F6E4D6574686F648178596469643A6865646572613A746573746E65743A7A3862724C44534D7542795759716431413779556861694C3854324C4B637865556469684434476D48647A61725F302E302E34333838373930236469642D726F6F742D6B65796E61757468656E7469636174696F6E8178596469643A6865646572613A746573746E65743A7A3862724C44534D7542795759716431413779556861694C3854324C4B637865556469684434476D48647A61725F302E302E34333838373930236469642D726F6F742D6B6579
+      ```
+
+      ## Dereference a DID URL
+
+      When dereferencing, the input is a DID URL plus dereferencing options, and
+      the output is the DID document, or part of a DID document, or other
+      resource.
+
+      ### Example 4: With a fragment
+
+      A request for a URL-encoded DID URL with a fragment will return only the
+      part of the DID document that is identified by the fragment, e.g. a
+      verification method:
+
+
+      `did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790#did-root-key`
+
+      ```sh
+        curl -H "Accept: application/did+ld+json" \
+          -X GET "https://identity-service.dev.hashgraph-group.com/universal-resolver/identifiers/did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790%23did-root-key"
+      ```
+
+      The result should contain only related fragment of the DID document:
+
+      ```yaml
+        {
+          "@context": "https://www.w3.org/ns/did/v1",
+          "id": "did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790#did-root-key",
+          "type": "Ed25519VerificationKey2018",
+          "controller": "did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790", 
+          "publicKeyBase58": "8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar"
+        }
+      ```
+
+      ### Example 5: With <code>service</code> and <code>relativeRef</code>
+      parameter
+
+      A request for a DID URL with these parameters will select one or more
+      service(s) from the DID document and then construct a service endpoint URL
+      using a relative URI reference 
+
+
+      `did:hedera:testnet:z5Y586SzRJSj2DemEos35k3KfcjavEbiwGPkwm96pJTL7_0.0.4567090?service=service-1&relativeRef=did-method-url-path`
+
+      ```sh
+        curl -H "Accept: application/did+ld+json" \
+          -X GET "https://identity-service.dev.hashgraph-group.com/universal-resolver/identifiers/did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790?service=github&relativeRef=did-method-dns"
+      ```
+
+      Consider having service definition within DID document:
+
+      ```yaml
+        "service": [
+          {
+            "id": "did:hedera:testnet:z5Y586SzRJSj2DemEos35k3KfcjavEbiwGPkwm96pJTL7_0.0.4567090#service-1",
+            "type": "LinkedDomains",
+            "serviceEndpoint": "https://test.com/did"
+          }
+        ]
+      ```
+
+      The result should contain only the endpoint URL based the data taken from
+      DID document:
+
+      ```yaml
+        https://test.com/did/did-method-url-path
+      ```
+paths:
+  /identifiers/{identifier}:
+    get:
+      tags:
+        - Universal Resolver
+      summary: Resolve a DID / Dereference a DID URL
+      description: >-
+        <p>This endpoint resolves a DID. As input it takes the DID, plus DID
+        resolution <a
+        href="https://www.w3.org/TR/did-core/#did-resolution-options">options</a>.
+        The output is a DID document in one of the supported representations,
+        plus metadata. The same endpoint can also be used to dereference a DID
+        URL. In this case, the output is a DID document, or part of a DID
+        document, or some other resource identified by the DID URL.</p> <p>See
+        the <a href="https://w3c-ccg.github.io/did-resolution/">DID
+        Resolution</a> specification for additional details.</p>
+      operationId: universalResolverGetIdentifier
+      parameters:
+        - name: identifier
+          in: path
+          description: The DID to be resolved, or the DID URL to be dereferenced.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+          examples:
+            example1:
+              description: A DID using the `hedera` method.
+              value: >-
+                did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790
+        - name: Accept
+          in: header
+          description: >-
+            The requested media type of the DID document representation or DID
+            resolution result. See <a
+            href="https://www.w3.org/TR/did-core/#representations">https://www.w3.org/TR/did-core/#representations</a>
+            and <a
+            href="https://w3c-ccg.github.io/did-resolution/#did-resolution-result">https://w3c-ccg.github.io/did-resolution/#did-resolution-result</a>.
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+          examples:
+            application/did+json:
+              description: Media type of a DID document (JSON representation).
+              value: application/json
+            application/did+ld+json:
+              description: Media type of a DID document (JSON-LD representation).
+              value: application/did+ld+json
+            application/ld+json;profile="https://w3id.org/did-resolution":
+              description: Media type of a DID resolution result (JSON-LD representation).
+              value: application/ld+json;profile="https://w3id.org/did-resolution"
+            application/did+cbor:
+              description: Media type of a DID document (CBOR representation).
+              value: application/did+cbor
+      responses:
+        '200':
+          description: Successfully resolved
+          content:
+            application/did+json:
+              schema:
+                $ref: '#/components/schemas/didDocument'
+            application/did+ld+json:
+              schema:
+                $ref: '#/components/schemas/didDocumentLd'
+            application/ld+json;profile="https://w3id.org/did-resolution":
+              schema:
+                $ref: '#/components/schemas/didDocumentProfile'
+            application/did+cbor:
+              schema:
+                type: string
+                description: The DID document (CBOR representation).
+              example:
+                A373646964446F63756D656E744D65746164617461A36976657273696F6E49646D3137313634363638373733343867637265617465647818323032342D30352D32335431313A35383A30302E3034355A67757064617465647818323032342D30352D32335431323A32313A31372E3334385A756469645265736F6C7574696F6E4D65746164617461A16B636F6E74656E7454797065776170706C69636174696F6E2F6469642B6C642B6A736F6E6B646964446F63756D656E74A66840636F6E74657874781C68747470733A2F2F7777772E77332E6F72672F6E732F6469642F7631626964784C6469643A6865646572613A746573746E65743A7A3862724C44534D7542795759716431413779556861694C3854324C4B637865556469684434476D48647A61725F302E302E343338383739306A636F6E74726F6C6C657278506469643A6865646572613A746573746E65743A7A364D6B6755763543766A52503641737645597153524E37646A423670347A4B3962634D5139336735794B365464374E5F302E302E323936313333323772766572696669636174696F6E4D6574686F6481A462696478596469643A6865646572613A746573746E65743A7A3862724C44534D7542795759716431413779556861694C3854324C4B637865556469684434476D48647A61725F302E302E34333838373930236469642D726F6F742D6B65796474797065781A45643235353139566572696669636174696F6E4B6579323031386A636F6E74726F6C6C657278506469643A6865646572613A746573746E65743A7A364D6B6755763543766A52503641737645597153524E37646A423670347A4B3962634D5139336735794B365464374E5F302E302E32393631333332376F7075626C69634B6579426173653538782C4241454D47334E574A6B7439414A64456B74724176586B6F335050515061684A58356D79556F33664B4861456F617373657274696F6E4D6574686F648178596469643A6865646572613A746573746E65743A7A3862724C44534D7542795759716431413779556861694C3854324C4B637865556469684434476D48647A61725F302E302E34333838373930236469642D726F6F742D6B65796E61757468656E7469636174696F6E8178596469643A6865646572613A746573746E65743A7A3862724C44534D7542795759716431413779556861694C3854324C4B637865556469684434476D48647A61725F302E302E34333838373930236469642D726F6F742D6B6579
+        '400':
+          description: Invalid DID or DID URL.
+        '404':
+          description: DID or DID URL not found.
+        '406':
+          description: Representation not supported.
+        '410':
+          description: Successfully resolved, but DID is deactivated.
+          content:
+            application/did+json:
+              schema:
+                $ref: '#/components/schemas/didDocument'
+            application/did+ld+json:
+              schema:
+                $ref: '#/components/schemas/didDocumentLd'
+            application/ld+json;profile="https://w3id.org/did-resolution":
+              schema:
+                $ref: '#/components/schemas/didDocumentProfile'
+            application/did+cbor:
+              schema:
+                type: string
+                description: The DID document (CBOR representation).
+              example:
+                A373646964446F63756D656E744D65746164617461A36976657273696F6E49646D3137313634363638373733343867637265617465647818323032342D30352D32335431313A35383A30302E3034355A67757064617465647818323032342D30352D32335431323A32313A31372E3334385A756469645265736F6C7574696F6E4D65746164617461A16B636F6E74656E7454797065776170706C69636174696F6E2F6469642B6C642B6A736F6E6B646964446F63756D656E74A66840636F6E74657874781C68747470733A2F2F7777772E77332E6F72672F6E732F6469642F7631626964784C6469643A6865646572613A746573746E65743A7A3862724C44534D7542795759716431413779556861694C3854324C4B637865556469684434476D48647A61725F302E302E343338383739306A636F6E74726F6C6C657278506469643A6865646572613A746573746E65743A7A364D6B6755763543766A52503641737645597153524E37646A423670347A4B3962634D5139336735794B365464374E5F302E302E323936313333323772766572696669636174696F6E4D6574686F6481A462696478596469643A6865646572613A746573746E65743A7A3862724C44534D7542795759716431413779556861694C3854324C4B637865556469684434476D48647A61725F302E302E34333838373930236469642D726F6F742D6B65796474797065781A45643235353139566572696669636174696F6E4B6579323031386A636F6E74726F6C6C657278506469643A6865646572613A746573746E65743A7A364D6B6755763543766A52503641737645597153524E37646A423670347A4B3962634D5139336735794B365464374E5F302E302E32393631333332376F7075626C69634B6579426173653538782C4241454D47334E574A6B7439414A64456B74724176586B6F335050515061684A58356D79556F33664B4861456F617373657274696F6E4D6574686F648178596469643A6865646572613A746573746E65743A7A3862724C44534D7542795759716431413779556861694C3854324C4B637865556469684434476D48647A61725F302E302E34333838373930236469642D726F6F742D6B65796E61757468656E7469636174696F6E8178596469643A6865646572613A746573746E65743A7A3862724C44534D7542795759716431413779556861694C3854324C4B637865556469684434476D48647A61725F302E302E34333838373930236469642D726F6F742D6B6579
+        '500':
+          description: Internal Error.
+        '501':
+          description: DID method not supported.
+      x-codeSamples:
+        - lang: cURL
+          source: |-
+            curl -H "Accept: application/did+ld+json" \
+              -X GET "https://identity-service.dev.hashgraph-group.com/universal-resolver/identifiers/did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790"
+  /properties:
+    get:
+      tags:
+        - Universal Resolver
+      summary: Return a map of configuration properties
+      description: >-
+        <p>This endpoint returns a map of the configuration properties of the
+        DID Resolver, including of its drivers.</p>
+      operationId: universalResolverGetProperties
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/did+json:
+              schema:
+                type: object
+                description: A map of properties.
+                examples:
+                  - driver-0:
+                    http:
+                      testIdentifiers:
+                        - >-
+                          did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.1723780
+                        - >-
+                          did:hedera:mainnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.153291
+                        - >-
+                          did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.114517
+                      resolveUri: https://api-testnet.hedera.com
+                      pattern: ^did:hedera:(mainnet|testnet):[a-zA-Z0-9.-_:]+$
+      x-codeSamples:
+        - lang: cURL
+          source: |-
+            curl -H "Accept: application/did+json" \
+              -X GET "https://identity-service.dev.hashgraph-group.com/universal-resolver/properties"
+  /methods:
+    get:
+      tags:
+        - Universal Resolver
+      summary: Return a list of supported DID methods
+      description: >-
+        <p>This endpoint returns a list of DID methods supported by the DID
+        Resolver.</p>
+      operationId: universalResolverGetMethods
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/did+json:
+              schema:
+                type: array
+                description: The list of supported DID methods.
+                examples:
+                  - hedera
+                items:
+                  type: string
+      x-codeSamples:
+        - lang: cURL
+          source: |-
+            curl -H "Accept: application/did+json" \
+              -X GET "https://identity-service.dev.hashgraph-group.com/universal-resolver/methods"
+  /testIdentifiers:
+    get:
+      tags:
+        - Universal Resolver
+      summary: Return a map of test identifiers
+      description: >-
+        <p>This endpoint returns a map of test identifiers, grouped by DID
+        method.</p>
+      operationId: universalResolverGetTestIdentifiers
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/did+json:
+              schema:
+                type: object
+                description: A map of test identifiers, grouped by DID method.
+                examples:
+                  - hedera:
+                    - >-
+                      did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.1723780
+                    - >-
+                      did:hedera:mainnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.153291
+                    - >-
+                      did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.114517
+      x-codeSamples:
+        - lang: cURL
+          source: |-
+            curl -H "Accept: application/did+json" \
+              -X GET "https://identity-service.dev.hashgraph-group.com/universal-resolver/testIdentifiers"
+components:
+  schemas:
+    didDocument:
+      type: object
+      description: The DID resolution result (JSON representation)
+      required:
+        - id
+        - verificationMethod
+        - assertionMethod
+        - authentication
+      properties:
+        id:
+          type: string
+          description: The DID identifier
+          examples:
+            - did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790
+        verificationMethod:
+          type: array
+          description: >-
+            A list of verification methods (keys) associated with the DID
+            document. Used for cryptographic operations such as authentication
+            and digital signatures. <br>The <code>hedera</code> method supports
+            <code>Ed25519VerificationKey2018</code> only.
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/ed25519VerificationKey2018'
+        assertionMethod:
+          type: array
+          description: >-
+            A list of verification methods used to express claims, such as
+            issuing verifiable credentials.
+          items:
+            type: string
+          examples:
+            - >-
+              did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790#did-root-key
+        authentication:
+          type: array
+          description: >-
+            A list of verification methods used to authenticate the controller
+            of the DID document.
+          items:
+            type: string
+          examples:
+            - did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790#did-root-key
+    didDocumentLd:
+      type: object
+      description: The DID resolution result (JSON+LD representation)
+      properties:
+        '@context':
+          type: string
+          description: The context URI that defines the terms used in the DID document.
+          examples: 
+            - https://www.w3.org/ns/did/v1
+      allOf:
+        - $ref: '#/components/schemas/didDocument'
+    didDocumentProfile:
+      type: object
+      description: The DID resolution result with metadata.
+      properties:
+        '@context':
+          description: The context URI that defines the terms used in the DID document.
+          type: string
+          examples: 
+            - https://www.w3.org/ns/did/v1
+        didDocument:
+          $ref: '#/components/schemas/didDocument'
+        didResolutionMetadata:
+          type: object
+          description: >-
+            Metadata about the DID resolution process, which may include status,
+            error messages, and other details.
+          additionalProperties: {}
+        didDocumentMetadata:
+          type: object
+          description: >-
+            Metadata about the DID document itself, such as timestamps, version
+            information, and other document-specific metadata.
+          additionalProperties: {}
+
+    verificationMethod:
+      type: object
+      required:
+        - id
+        - type
+        - controller
+      properties:
+        id:
+          type: string
+          description: The identifier of verification method
+          examples:
+            - did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790#did-root-key
+        type:
+          type: string
+          description: >-
+            The verification method type. See
+            https://www.w3.org/TR/did-spec-registries/#verification-method-types
+          enum:
+            - Ed25519VerificationKey2018            
+          examples: 
+            - Ed25519VerificationKey2018
+        controller:
+          type: string
+          description: >-
+            The DID of an entity that has the capability to make changes to a
+            DID document
+          examples:
+            - did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790
+      discriminator:
+        propertyName: type
+        mapping:
+          Ed25519VerificationKey2018: '#/components/schemas/ed25519VerificationKey2018'          
+    ed25519VerificationKey2018:
+      required:
+        - publicKeyBase58
+      allOf:
+        - $ref: '#/components/schemas/verificationMethod'
+        - $ref: '#/components/schemas/verificationMethod'
+        - type: object
+          properties:
+            publicKeyBase58:
+              type: string
+              description: The Base58-encoded Public Key
+              examples: 
+                - 8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar

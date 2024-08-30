@@ -1,0 +1,822 @@
+openapi: 3.1.0
+info:
+  title: Universal Registrar
+  contact:
+    name: Support
+    email: identity@hashgraph-group.com
+  termsOfService: https://hashgraph-association.com/
+  version: 1.0.1
+servers:
+  - url: https://identity-service.dev.hashgraph-group.com/universal-registrar
+    description: development
+  - url: https://identity-service.prod.hashgraph-group.com/universal-registrar
+    description: production
+  - url: /universal-registrar
+tags:
+  - name: Universal Registrar
+    description: >
+      The Universal Registrar enables the creation/update/deactivation of hedera type ("method") of [Decentralized Identifiers (DIDs)](https://www.w3.org/TR/did-core/), using a common interface. It offers an HTTP(S) binding to the DID Registration functions, which are defined in the DIF I&D WG's [DID Registration](https://identity.foundation/did-registration/) specification.
+      By default, the Universal Registrar returns the cryptographic keys (including private keys) in the response body of the API calls.
+
+      ## Create a DID
+
+      When creating DIDs, the input is a DID create request object, and the output is a DID create status object.
+
+      ### Example 1: Using did:hedera
+
+      #### Supported options:
+
+      - network: The network on which to create the DID (possible values: `mainnet`, `testnet`)
+
+      ```sh
+        curl -X POST "https://virtserver.swaggerhub.com/Hashgraph-Labs/universal-registrar/1.0.1/universal-registrar/create?method=hedera" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "jobId": null,
+            "options": {
+              "network": "testnet"
+            },
+            "secret": { },
+            "didDocument": {
+              "@context": ["https//www.w3.org/ns/did/v1"],
+              "authentication": [],
+              "service": [ ]
+            }
+          }'
+      ```
+
+      ## Update a DID
+
+      When updating DIDs, the input is a DID update request object, and the output is a DID create status object.
+
+      ### Example 2: Add additional verification method
+
+      #### Supported options:
+
+      - network: The network on which to create the DID (possible values: `mainnet`, `testnet`)
+
+      ```sh
+        curl -X POST "https://virtserver.swaggerhub.com/Hashgraph-Labs/universal-registrar/1.0.1/universal-registrar/update" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "jobId": null,
+            "did": "did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790",
+            "options": {
+              "network": "testnet"
+            },
+            "secret": { },
+            "didDocumentOperation": ["addToDidDocument"],
+            "didDocument": [{
+              "verificationMethod": [{
+                "id": "did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790#additionalKey",
+                "type": "Ed25519VerificationKey2018",
+                "controller": "did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790",
+                "publicKeyBase58": "A7yUhaiL8T2LKcxeUdihar8bD4GmHdzrLDSMuByWYqd1"
+              }]
+            }]
+          }'
+      ```
+
+      ### Example 3: Add and remove verification method
+
+      ```sh
+        curl -X POST "https://virtserver.swaggerhub.com/Hashgraph-Labs/universal-registrar/1.0.1/universal-registrar/update" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "jobId": null,
+            "did": "did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790",
+            "options": {
+              "network": "testnet"
+            },
+            "secret": { },
+            "didDocumentOperation": ["removeFromDidDocument", "addToDidDocument"],
+            "didDocument": [{
+              "verificationMethod": [{
+                "id": "did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790#did-root-key"
+              }]
+              },
+              {
+              "verificationMethod": [{
+                "id": "did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790#additionalKey",
+                "type": "Ed25519VerificationKey2018",
+                "controller": "did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790",
+                "publicKeyBase58": "A7yUhaiL8T2LKcxeUdihar8bD4GmHdzrLDSMuByWYqd1"
+              }]
+            }]
+          }'
+      ```
+
+      ## Deactivate a DID
+
+      ### Example 4: Using did:hedera
+
+      #### Supported options:
+
+      - network: The network on which to create the DID (possible values: `mainnet`, `testnet`)
+
+      ```sh
+        curl -X POST "https://virtserver.swaggerhub.com/Hashgraph-Labs/universal-registrar/1.0.1/universal-registrar/deactivate" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "jobId": null,
+            "options": {
+              "network": "testnet"
+            },
+            "secret": { },
+            "did": "did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790"
+          }'
+      ```
+
+paths:
+  /create:
+    post:
+      tags:
+        - Universal Registrar
+      summary: Create a DID
+      description:
+        "<p>This endpoint creates a DID. As input it takes the DID, a DID\
+        \ document, plus optional DID registration <a href=\"https://identity.foundation/did-registration/#options\"\
+        >options</a> and <a href=\"https://identity.foundation/did-registration/#secret\"\
+        >secrets</a> needed to create a DID. The output is a state object that represents\
+        \ the current state of the DID creation process.</p> <p>See the <a href=\"\
+        https://identity.foundation/did-registration/#create\">DID Registration</a>\
+        \ specification for additional details.</p>"
+      operationId: universalRegistrarCreate
+      parameters:
+        - name: method
+          in: query
+          description: The requested DID method for the operation.
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+          example: hedera
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRequest'
+      responses:
+        "201":
+          description:
+            "The DID has been successfully created, as indicated by the\
+            \ \"didState.state\" output field. Additional state information (including\
+            \ the created DID) plus metadata are available in the response body."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateState'
+        "400":
+          description:
+            A problem with the input fields has occurred. Additional state
+            information plus metadata may be available in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateState'
+        "500":
+          description:
+            An internal error has occurred. Additional state information
+            plus metadata may be available in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateState'
+  /update:
+    post:
+      tags:
+        - Universal Registrar
+      summary: Update a DID
+      description:
+        "<p>This endpoint updates a DID. As input it takes the existing\
+        \ DID, a DID document, plus optional DID registration <a href=\"https://identity.foundation/did-registration/#options\"\
+        >options</a> and <a href=\"https://identity.foundation/did-registration/#secret\"\
+        >secrets</a> needed to update a DID. The output is a state object that represents\
+        \ the current state of the DID update process.</p> <p>See the <a href=\"https://identity.foundation/did-registration/#update\"\
+        >DID Registration</a> specification for additional details.</p>"
+      operationId: update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRequest'
+      responses:
+        "200":
+          description:
+            "The request was successful, and the DID may or may not be\
+            \ fully updated yet, as indicated by the \"didState.state\" and \"jobId\"\
+            \ output fields. Additional state information plus metadata are available\
+            \ in the response body."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateState'
+        "400":
+          description:
+            A problem with the input fields has occurred. Additional state
+            information plus metadata may be available in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateState'
+        "500":
+          description:
+            An internal error has occurred. Additional state information
+            plus metadata may be available in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateState'
+  /deactivate:
+    post:
+      tags:
+        - Universal Registrar
+      summary: Deactivate a DID
+      description:
+        "<p>This endpoint deactivates a DID. As input it takes the existing\
+        \ DID, plus optional DID registration <a href=\"https://identity.foundation/did-registration/#options\"\
+        >options</a> and <a href=\"https://identity.foundation/did-registration/#secret\"\
+        >secrets</a> needed to deactivate a DID. The output is a state object that\
+        \ represents the current state of the DID deactivation process.</p> <p>See\
+        \ the <a href=\"https://identity.foundation/did-registration/#deactivate\"\
+        >DID Registration</a> specification for additional details.</p>"
+      operationId: deactivate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeactivateRequest'
+      responses:
+        "200":
+          description:
+            "The request was successful, and the DID may or may not be\
+            \ fully deactivated yet, as indicated by the \"didState.state\" and \"\
+            jobId\" output fields. Additional state information plus metadata are\
+            \ available in the response body."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeactivateState'
+        "400":
+          description:
+            A problem with the input fields has occurred. Additional state
+            information plus metadata may be available in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeactivateState'
+        "500":
+          description:
+            An internal error has occurred. Additional state information
+            plus metadata may be available in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeactivateState'
+  /properties:
+    get:
+      tags:
+        - Universal Registrar
+      summary: Return a map of configuration properties
+      description:
+        "<p>This endpoint returns a map of the configuration properties\
+        \ of the DID Registrar, including of its drivers.</p>"
+      operationId: universalRegistrarGetProperties
+      responses:
+        "200":
+          description: Success.
+          content:
+            application/did+json:
+              schema:
+                type: object
+                description: A map of properties.
+                examples:
+                  - driver-0:
+                      http:
+                        testIdentifiers:
+                          - did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790
+                          - did:hedera:testnet:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm__0.0.12345
+                        resolveUri: https://api-testnet.hedera.com
+                        pattern: "^did:hedera:(mainnet|testnet):[a-zA-Z0-9.-_:]+$"
+  /methods:
+    get:
+      tags:
+        - Universal Registrar
+      summary: Return a list of supported DID methods
+      description:
+        <p>This endpoint returns a list of DID methods supported by the
+        DID Registrar.</p>
+      operationId: universalRegistrarGetMethods
+      responses:
+        "200":
+          description: Success.
+          content:
+            application/did+json:
+              schema:
+                type: array
+                description: The list of supported DID methods.
+                examples:
+                  - hedera
+                items:
+                  type: string
+components:
+  schemas:
+    RegistrarRequest:
+      type: object
+      description: Input fields for a DID operation.
+      properties:
+        jobId:
+          type: string
+          description: "<p>
+            The <code>jobId</code> parameter is used to track the progress of an ongoing DID operation process. For more details, refer to
+            <a href=\"https://identity.foundation/did-registration/#jobid\">https://identity.foundation/did-registration/#jobid</a>.<br>
+            For <code>hedera</code> method this parameter should be set to <code>null</code> as the operation is short and does not require tracking.</p>"
+        options:
+          $ref: '#/components/schemas/RequestOptions'
+        secret:
+          $ref: '#/components/schemas/RequestSecret'
+      required:
+        - jobId
+        - options
+        - secret
+
+    RequestOptions:
+      type: object
+      description:
+        "This input field contains an object with various options for the\
+        \ DID operation, such as the network where the DID operation should be executed.\
+        \ See <a href=\"https://identity.foundation/did-registration/#options\">https://identity.foundation/did-registration/#options</a>."
+      properties:
+        network:
+          type: string
+          enum:
+            - testnet
+            - mainnet
+        clientSecretMode:
+          type: boolean
+          description: "The DID Registrar will enable client-managed secret mode and let the client perform cryptographic operations such as generating signatures.<br>For <code>hedera</code> method the expected value is: <code>false</code>."
+        storeSecrets:
+          type: boolean
+          description: "The DID Registrar maintains an internal wallet where DIDs and DID controller keys can be stored..<br>For <code>hedera</code> method  the expected value is: <code>true</code>."
+        returnSecrets:
+          type: boolean
+          description: "The DID Registrar will return generated DID controller keys to the client..<br>For <code>hedera</code> method the expected value is: <code>false</code>."
+      required:
+        - network
+      examples:
+        - network: testnet
+          storeSecrets: true
+
+    RequestOptionsRequestVerificationMethod:
+      type: array
+      items:
+        $ref: '#/components/schemas/VerificationMethodTemplate'
+
+    CreateRequest:
+      description: Input fields for a DID create operation.
+      allOf:
+        - $ref: '#/components/schemas/RegistrarRequest'
+        - type: object
+          properties:
+            didDocument:
+              $ref: '#/components/schemas/DidDocumentRepresentation'
+
+    UpdateRequest:
+      description: Input fields for a DID update operation.
+      allOf:
+        - $ref: '#/components/schemas/RegistrarRequest'
+        - required:
+            - did
+          type: object
+          properties:
+            did:
+              type: string
+              description:
+                This input field indicates the DID that is the target of
+                the DID update operation.
+              examples: 
+                - did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790
+            didDocumentOperation:
+              type: array
+              description:
+                This input field indicates which update operation should
+                be applied to a DID’s associated DID document. See <a href="https://identity.foundation/did-registration/#diddocumentoperation">https://identity.foundation/did-registration/#diddocumentoperation</a>.
+              examples:
+                - setDidDocument
+              items:
+                type: string
+            didDocument:
+              type: array
+              description:
+                "This input field contains either a complete DID document,\
+                \ or an incremental change (diff) to a DID document. See <a href=\"\
+                https://identity.foundation/did-registration/#diddocument\">https://identity.foundation/did-registration/#diddocument</a>."
+              items:
+                $ref: "#/components/schemas/DidDocumentRepresentation"
+    DeactivateRequest:
+      description: Input fields for a DID deactivate operation.
+      allOf:
+        - $ref: '#/components/schemas/RegistrarRequest'
+        - required:
+            - did
+          type: object
+          properties:
+            did:
+              type: string
+              description:
+                This input field indicates the DID that is the target of
+                the DID deactivation operation.
+              examples: 
+                - 'did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790'
+
+    DidDocumentRepresentation:
+      type: object
+      description:
+        This input field contains the DID document to be used for the DID
+        create operation. See <a href="https://identity.foundation/did-registration/#diddocument">https://identity.foundation/did-registration/#diddocument</a>.
+      properties:
+        "@context":
+          type: string
+          description: The context URI that defines the terms used in the DID document.
+          examples:
+            - https://www.w3.org/ns/did/v1
+        authentication:
+          type: array
+          description:
+            "A list of verification methods used to authenticate the controller of the DID document.
+            <br>For <code>hedera</code> method this parameter should be set to empty array <code>null</code>."
+          items:
+            type: string
+          examples:
+            - 'did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790#did-root-key'
+        service:
+          $ref: '#/components/schemas/DidDocumentService'
+      additionalProperties: {}
+      required:
+        - "@context"
+        - authentication
+        - service
+
+    DidDocumentRepresentationRespond:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/DidDocumentRepresentation'
+      properties:
+        assertionMethod:
+          type: array
+          description: A list of verification methods used to express claims, such as issuing verifiable credentials.
+          items:
+            type: string
+          examples:
+            - 'did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790#did-root-key'
+      required:
+        - assertionMethod
+
+    DidDocumentController:
+      type: array
+      items:
+        type: string
+        examples: 
+          - "[\"did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790\"]"
+
+    DidDocumentVerificationMethod:
+      type: array
+      items:
+        type: object
+        additionalProperties: {}
+
+    DidDocumentService:
+      type: array
+      description:
+        A service can be any type of service the DID subject wants to advertise, including decentralized identity management services for further discovery, authentication, authorization, or interaction.
+        <br>For <code>hedera</code> method this parameter should be set to empty array <code>null</code>."
+      items:
+        type: object
+        additionalProperties: {}
+
+    RegistrarState:
+      required:
+        - didState
+      type: object
+      properties:
+        jobId:
+          type: string
+          examples: 
+            - 6d85bcd0-2ea3-4288-ab00-15afadd8a156
+        didState:
+          $ref: '#/components/schemas/DidState'
+        didRegistrationMetadata:
+          type: object
+          additionalProperties: {}
+        didDocumentMetadata:
+          type: object
+          additionalProperties: {}
+      description: The state after a DID operation.
+
+    CreateState:
+      description: The state after a DID create operation.
+      allOf:
+        - $ref: '#/components/schemas/RegistrarState'
+        - type: object
+    UpdateState:
+      description: The state after an update operation.
+      allOf:
+        - $ref: '#/components/schemas/RegistrarState'
+        - type: object
+    DeactivateState:
+      description: The state after a deactivate operation.
+      allOf:
+        - $ref: '#/components/schemas/RegistrarState'
+        - type: object
+    DidState:
+      type: object
+      description: The current state of a DID.
+      required:
+        - state
+      discriminator:
+        propertyName: state
+        mapping:
+          finished: '#/components/schemas/DidStateFinished'
+          failed: '#/components/schemas/DidStateFailed'
+          action: '#/components/schemas/DidStateAction'
+          wait: '#/components/schemas/DidStateWait'
+      properties:
+        state:
+          type: string
+          examples: 
+            - "finished"
+        did:
+          type: string
+          examples: 
+            - "did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790"
+        secret:
+          $ref: '#/components/schemas/DidStateSecret'
+        didDocument:
+          $ref: '#/components/schemas/DidDocumentRepresentationRespond'
+      additionalProperties: {}
+
+    DidStateFinished:
+      description:
+        This state indicates that the DID operation has been completed.
+        See https://identity.foundation/did-registration/#didstatestatefinished.
+      allOf:
+        - $ref: '#/components/schemas/DidState'
+        - type: object
+
+    DidStateFailed:
+      description: This state indicates that the DID operation has failed. See https://identity.foundation/did-registration/#didstatestatefailed.
+      allOf:
+        - $ref: '#/components/schemas/DidState'
+        - type: object
+          properties:
+            error:
+              type: string
+            reason:
+              type: string
+
+    DidStateAction:
+      description:
+        This state indicates that the client needs to perform an action,
+        before the DID operation can be continued. See https://identity.foundation/did-registration/#didstatestateaction.
+      allOf:
+        - $ref: '#/components/schemas/DidState'
+        - type: object
+          properties:
+            action:
+              type: string
+            verificationMethodTemplate:
+              type: array
+              items:
+                $ref: "#/components/schemas/VerificationMethodTemplate"
+            signingRequest:
+              type: 
+                - object
+                - 'null'
+              additionalProperties:
+                $ref: "#/components/schemas/SigningRequest"
+            decryptionRequest:
+              type: 
+                - object
+                - 'null'
+              additionalProperties:
+                $ref: "#/components/schemas/DecryptionRequest"
+
+    DidStateWait:
+      description:
+        This state indicates that the client needs to wait, before the
+        DID operation can be continued. See https://identity.foundation/did-registration/#didstatestatewait.
+      allOf:
+        - $ref: '#/components/schemas/DidState'
+        - type: object
+          properties:
+            wait:
+              type: string
+            waittime:
+              type: string
+
+    Secret:
+      type: object
+      properties:
+        verificationMethod:
+          $ref: '#/components/schemas/SecretVerificationMethod'
+      additionalProperties: {}
+      description: Secrets in requests and states.
+      examples:
+        - example:
+          - verificationMethod:
+              - id: did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790#did-root-key
+                type: Ed25519VerificationKey2018
+                controller: did:hedera:testnet:z8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar_0.0.4388790
+                publicKeyBase58: 8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar
+    
+    SecretVerificationMethod:
+      type: array
+      items:
+        oneOf:
+          - $ref: '#/components/schemas/VerificationMethodPublicData'
+
+    SecretVerificationMethodVerificationMethodTemplate:
+      type: array
+      items:
+        $ref: '#/components/schemas/VerificationMethodTemplate'
+
+    RequestSecret:
+      description:
+        This input field contains an object with DID controller keys and
+        other secrets needed for performing the DID operation. See https://identity.foundation/did-registration/#secret.<br>
+        For <code>hedera</code> method this parameter should be set to empty object <code>{}</code>.
+      allOf:
+        - $ref: '#/components/schemas/Secret'
+        - type: object
+          properties:
+            signingResponse:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/SigningResponse'
+            decryptionResponse:
+              type: 
+                - object
+                - 'null'
+              additionalProperties:
+                $ref: '#/components/schemas/DecryptionResponse'
+
+    DidStateSecret:
+      description:
+        This output field contains an object with DID controller keys and
+        other secrets. See https://identity.foundation/did-registration/#didstatesecret.
+      allOf:
+        - $ref: '#/components/schemas/Secret'
+
+    SigningRequest:
+      required:
+        - alg
+        - serializedPayload
+      type: object
+      properties:
+        payload:
+          type: object
+        serializedPayload:
+          type: string
+        kid:
+          type: string
+        alg:
+          type: string
+        purpose:
+          type: string
+      additionalProperties: {}
+      description: "A signing request, see https://identity.foundation/did-registration/#signing-request-set."
+    SigningRequestSet:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/SigningRequest"
+      description: "A signing request set, see https://identity.foundation/did-registration/#signing-request-set."
+
+    SigningResponse:
+      description: A signing response, see https://identity.foundation/did-registration/#signing-response-set.
+      type: object
+      required:
+        - signature
+      properties:
+        signature:
+          type: string
+        kid:
+          type: string
+        alg:
+          type: string
+        purpose:
+          type: string
+      additionalProperties: {}
+    SigningResponseSet:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/SigningResponse'
+      description: "A signing response set, see https://identity.foundation/did-registration/#signing-response-set."
+    DecryptionRequest:
+      required:
+        - enc
+        - encryptedPayload
+      type: object
+      properties:
+        payload:
+          type: string
+        encryptedPayload:
+          type: string
+        kid:
+          type: string
+        enc:
+          type: string
+        purpose:
+          type: string
+      additionalProperties: {}
+      description: "A decryption request, see https://identity.foundation/did-registration/#decryption-request-set."
+    DecryptionRequestSet:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/DecryptionRequest'
+      description: "A decryption request set, see https://identity.foundation/did-registration/#decryption-request-set."
+    DecryptionResponse:
+      required:
+        - decryptedPayload
+      type: object
+      properties:
+        decryptedPayload:
+          type: string
+        kid:
+          type: string
+        enc:
+          type: string
+        purpose:
+          type: string
+      additionalProperties: {}
+      description: "A decryption response, see https://identity.foundation/did-registration/#decryption-response-set."
+    DecryptionResponseSet:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/DecryptionResponse'
+      description: "A decryption response set, see https://identity.foundation/did-registration/#decryption-response-set."
+    VerificationMethodData:
+      required:
+        - type
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        controller:
+          type: string
+        purpose:
+          type: array
+          items:
+            type: string
+            enum:
+              - authentication
+              - assertionMethod
+              - capabilityDelegation
+              - capabilityInvocation
+
+    VerificationMethodPublicData:
+      description: "A verification method public data object, see https://identity.foundation/did-registration/#verification-method-public-data"
+      allOf:
+        - $ref: '#/components/schemas/VerificationMethodData'
+        - type: object
+          properties:
+            publicKeyBase58:
+              type: string
+              examples: 
+                - 8brLDSMuByWYqd1A7yUhaiL8T2LKcxeUdihD4GmHdzar
+
+    VerificationMethodPrivateData:
+      description: "A verification method private data object, see https://identity.foundation/did-registration/#verification-method-private-data"
+      allOf:
+        - $ref: '#/components/schemas/VerificationMethodData'
+        - type: object
+          properties:
+            privateKeyJwk:
+              type: 
+                - object
+                - 'null'
+              additionalProperties: {}
+            privateKeyMultibase:
+              type: string
+
+    VerificationMethodTemplate:
+      type: object
+      description: "A verification method template, see https://identity.foundation/did-registration/#verification-method-template"
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        controller:
+          type: string
+        purpose:
+          type: array
+          items:
+            type: string
+        publicKeyJwk:
+          type: 
+            - object
+            - 'null'
+          additionalProperties: {}

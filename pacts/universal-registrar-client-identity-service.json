@@ -1,0 +1,438 @@
+{
+  "consumer": {
+    "name": "universal-registrar-client"
+  },
+  "interactions": [
+    {
+      "description": "a request for registrar to add service and removed verification method a DID",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a created DID with hedera method"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "did": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957",
+            "didDocument": [],
+            "didDocumentOperation": [],
+            "options": {
+              "network": "testnet"
+            },
+            "secret": {
+              "verificationMethod": [
+                {
+                  "controller": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957",
+                  "id": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957#did-root-key",
+                  "privateKeyMultibase": "z8ZqHhy44r9uXiowuULCaudVy8N7zuHCqj2veXhLkLUeC",
+                  "type": "Ed25519VerificationKey2020"
+                }
+              ]
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {}
+        },
+        "method": "POST",
+        "path": "/universal-registrar/update"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "didDocumentMetadata": {},
+            "didRegistrationMetadata": {},
+            "didState": {
+              "did": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957",
+              "didDocument": {
+                "@context": "https://www.w3.org/ns/did/v1",
+                "assertionMethod": [
+                  "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957#did-root-key"
+                ],
+                "authentication": [
+                  "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957#did-root-key"
+                ],
+                "id": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957",
+                "service": [],
+                "verificationMethod": [
+                  {
+                    "controller": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957",
+                    "id": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957#did-root-key",
+                    "publicKeyBase58": "5VXK3TRNZXR7FJxRtSnXNk3gWmHsdHtSVBULVQPF9ws6",
+                    "type": "Ed25519VerificationKey2018"
+                  }
+                ]
+              },
+              "secret": {},
+              "state": "finished"
+            },
+            "jobId": "6d85bcd0-2ea3-4288-ab00-15afadd8a156"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for registrar to create a DID",
+      "pending": false,
+      "request": {
+        "body": {
+          "content": {
+            "didDocument": {
+              "@context": "https://www.w3.org/ns/did/v1",
+              "authentication": [],
+              "service": []
+            },
+            "jobId": null,
+            "options": {
+              "network": "testnet"
+            },
+            "secret": {}
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "query": {}
+        },
+        "method": "POST",
+        "path": "/universal-registrar/create",
+        "query": {
+          "method": [
+            "hedera"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "content": {
+            "didDocumentMetadata": {},
+            "didRegistrationMetadata": {},
+            "didState": {
+              "did": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957",
+              "didDocument": {
+                "@context": "https://www.w3.org/ns/did/v1",
+                "assertionMethod": [],
+                "authentication": [],
+                "id": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957",
+                "verificationMethod": []
+              },
+              "secret": {
+                "verificationMethod": [
+                  {
+                    "controller": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957",
+                    "id": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957#did-root-key",
+                    "privateKeyMultibase": "z8ZqHhy44r9uXiowuULCaudVy8N7zuHCqj2veXhLkLUeC",
+                    "type": "Ed25519VerificationKey2020"
+                  }
+                ]
+              },
+              "state": "finished"
+            },
+            "jobId": null
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 201
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for registrar to deactivate a DID",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a created DID with hedera method"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "did": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957",
+            "jobId": null,
+            "options": {},
+            "secret": {
+              "verificationMethod": [
+                {
+                  "controller": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957",
+                  "id": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957#did-root-key",
+                  "privateKeyMultibase": "z8ZqHhy44r9uXiowuULCaudVy8N7zuHCqj2veXhLkLUeC",
+                  "type": "Ed25519VerificationKey2020"
+                }
+              ]
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {}
+        },
+        "method": "POST",
+        "path": "/universal-registrar/deactivate"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "didDocumentMetadata": {},
+            "didRegistrationMetadata": {},
+            "didState": {
+              "did": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957",
+              "didDocument": {
+                "@context": "https://www.w3.org/ns/did/v1",
+                "assertionMethod": [],
+                "authentication": [],
+                "id": "did:hedera:mainnet:5zNgYSNqFmpfbNdYGXuxy7JfgFKLFXW3X2BiqykfMjpmXtSf9oXBaVA_0.0.4654957",
+                "verificationMethod": []
+              },
+              "state": "finished"
+            },
+            "jobId": null
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for resolver supported methods",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a list of supported DID methods for registrar with hedera"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/did+json"
+          ]
+        },
+        "method": "GET",
+        "path": "/universal-registrar/methods"
+      },
+      "response": {
+        "body": {
+          "content": [
+            "hedera"
+          ],
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/did+json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for supported methods properties",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a list of properties for hedera DID methods of registrar"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/did+json"
+          ]
+        },
+        "method": "GET",
+        "path": "/universal-registrar/properties"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "driver-0": {
+              "http": {
+                "pattern": "^did:hedera:(mainnet|testnet):\\w+_(\\d\\.){2}\\d+$",
+                "resolverUri": "https://identity-service.dev.hashgraph-group.com/",
+                "testIdentifiers": [
+                  "did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.1723780",
+                  "did:hedera:mainnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.153291",
+                  "did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.114517"
+                ]
+              }
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/did+json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pactRust": {
+      "ffi": "0.4.22",
+      "models": "1.2.3"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "identity-service"
+  }
+}

@@ -1,0 +1,57 @@
+openapi: 3.1.0
+info:
+  title: Identity Service
+  contact:
+    name: Support
+    email: identity@hashgraph-group.com
+  termsOfService: https://hashgraph-association.com/
+  version: 1.0.1
+tags:
+  - name: Introduction
+    description: >
+      The Hedera Association OpenAPI v1.0.1 specification for Identity Service.
+
+
+      The API documentation will start with a general overview about the design
+      and technology that has been implemented, followed by reference information
+      about specific endpoints.
+  - name: Universal Resolver
+    description:
+      $ref: './universal-resolver/openapi-v1.0.1.yaml#/tags/0/description'
+  - name: Universal Registrar
+    description:
+      $ref: './universal-registrar/openapi-v1.0.1.yaml#/tags/0/description'
+
+servers:
+  - url: https://identity-service.dev.hashgraph-group.com
+    description: development
+  - url: https://identity-service.prod.hashgraph-group.com
+    description: production
+
+paths:
+  /universal-resolver/identifiers/{identifier}:
+    $ref: './universal-resolver/openapi-v1.0.1.yaml#/paths/~1identifiers~1{identifier}'
+  /universal-resolver/properties:
+    $ref: './universal-resolver/openapi-v1.0.1.yaml#/paths/~1properties'
+  /universal-resolver/methods:
+    $ref: './universal-resolver/openapi-v1.0.1.yaml#/paths/~1methods'
+  /universal-resolver/testIdentifiers:
+    $ref: './universal-resolver/openapi-v1.0.1.yaml#/paths/~1testIdentifiers'
+
+  /universal-registrar/create:
+    $ref: './universal-registrar/openapi-v1.0.1.yaml#/paths/~1create'
+  /universal-registrar/update:
+    $ref: './universal-registrar/openapi-v1.0.1.yaml#/paths/~1update'
+  /universal-registrar/deactivate:
+    $ref: './universal-registrar/openapi-v1.0.1.yaml#/paths/~1deactivate'
+  /universal-registrar/properties:
+    $ref: './universal-registrar/openapi-v1.0.1.yaml#/paths/~1properties'
+  /universal-registrar/methods:
+    $ref: './universal-registrar/openapi-v1.0.1.yaml#/paths/~1methods'
+
+components:
+  schemas:
+    resolverSchemas:
+      $ref: './universal-resolver/openapi-v1.0.1.yaml#/components/schemas'
+    registrarSchemas:
+      $ref: './universal-registrar/openapi-v1.0.1.yaml#/components/schemas'

@@ -1,0 +1,602 @@
+{
+  "consumer": {
+    "name": "universal-resolver-client"
+  },
+  "interactions": [
+    {
+      "description": "a request for dereference a document fragment",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a DID document with a verification method"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/did+ld+json"
+          ]
+        },
+        "method": "GET",
+        "path": "/universal-resolver/identifiers/did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.1723780%23root-key"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "controller": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212",
+            "id": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#did-root-key",
+            "publicKeyBase58": "5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T",
+            "type": "Ed25519VerificationKey2018"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/did+ld+json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for dereferencing a service endpoint",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a DID document with a service"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/did+ld+json"
+          ]
+        },
+        "method": "GET",
+        "path": "/universal-resolver/identifiers/did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.1723780",
+        "query": {
+          "service": [
+            "service-1"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "content": "aHR0cHM6Ly9leGFtcGxlLmNvbS8=",
+          "contentType": "*/*",
+          "encoded": "base64"
+        },
+        "headers": {
+          "Content-Type": [
+            "application/did+ld+json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "contentType",
+                  "value": "text/plain"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for dereferencing a service endpoint with relative reference",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a DID document with a service"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/did+ld+json"
+          ]
+        },
+        "method": "GET",
+        "path": "/universal-resolver/identifiers/did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.1723780",
+        "query": {
+          "relativeRef": [
+            "some-path"
+          ],
+          "service": [
+            "service-1"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "content": "aHR0cHM6Ly9leGFtcGxlLmNvbS9zb21lLXBhdGgv",
+          "contentType": "*/*",
+          "encoded": "base64"
+        },
+        "headers": {
+          "Content-Type": [
+            "application/did+ld+json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "contentType",
+                  "value": "text/plain"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for resolver supported methods",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a list of supported DID methods for resolver with hedera"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/did+json"
+          ]
+        },
+        "method": "GET",
+        "path": "/universal-resolver/methods"
+      },
+      "response": {
+        "body": {
+          "content": [
+            "hedera"
+          ],
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/did+json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for resolver test identifiers",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a list of test DID identifiers for hedera method"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/did+json"
+          ]
+        },
+        "method": "GET",
+        "path": "/universal-resolver/testIdentifiers"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "hedera": [
+              "did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.1723780",
+              "did:hedera:mainnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.153291",
+              "did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.114517"
+            ]
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/did+json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for resolving a DID document full profile",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a DID document"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/ld+json;profile=\"https://w3id.org/did-resolution\""
+          ]
+        },
+        "method": "GET",
+        "path": "/universal-resolver/identifiers/did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.1723780"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "didDocument": {
+              "@context": "https://www.w3.org/ns/did/v1",
+              "assertionMethod": [
+                "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#did-root-key"
+              ],
+              "authentication": [
+                "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#did-root-key"
+              ],
+              "id": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212",
+              "service": [
+                {
+                  "id": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#service-1",
+                  "serviceEndpoint": "https://example.com/",
+                  "type": "LinkedDomains"
+                }
+              ],
+              "verificationMethod": [
+                {
+                  "controller": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212",
+                  "id": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#did-root-key",
+                  "publicKeyBase58": "5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T",
+                  "type": "Ed25519VerificationKey2018"
+                }
+              ]
+            },
+            "didDocumentMetadata": {
+              "created": "2024-07-16T09:31:45.233Z",
+              "updated": "2024-07-16T09:31:55.977Z",
+              "versionId": "1721122315977"
+            },
+            "didResolutionMetadata": {
+              "contentType": "application/did+ld+json"
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/ld+json;profile=\"https://w3id.org/did-resolution\""
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for resolving a DID document in CBOR format",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a DID document"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/did+cbor"
+          ]
+        },
+        "method": "GET",
+        "path": "/universal-resolver/identifiers/did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.1723780"
+      },
+      "response": {
+        "body": {
+          "content": "QTM3MzY0Njk2NDQ0NkY2Mzc1NkQ2NTZFNzQ0RDY1NzQ2MTY0NjE3NDYxQTM2OTc2NjU3MjczNjk2RjZFNDk2NDZEMzEzNzMyMzEzMTMyMzIzMzMxMzUzOTM3Mzc2NzYzNzI2NTYxNzQ2NTY0NzgxODMyMzAzMjM0MkQzMDM3MkQzMTM2NTQzMDM5M0EzMzMxM0EzNDM1MkUzMjMzMzM1QTY3NzU3MDY0NjE3NDY1NjQ3ODE4MzIzMDMyMzQyRDMwMzcyRDMxMzY1NDMwMzkzQTMzMzEzQTM1MzUyRTM5MzczNzVBNzU2NDY5NjQ1MjY1NzM2RjZDNzU3NDY5NkY2RTRENjU3NDYxNjQ2MTc0NjFBMTZCNjM2RjZFNzQ2NTZFNzQ1NDc5NzA2NTc3NjE3MDcwNkM2OTYzNjE3NDY5NkY2RTJGNjQ2OTY0MkI2QzY0MkI2QTczNkY2RTZCNjQ2OTY0NDQ2RjYzNzU2RDY1NkU3NEE2Njg0MDYzNkY2RTc0NjU3ODc0NzgxQzY4NzQ3NDcwNzMzQTJGMkY3Nzc3NzcyRTc3MzMyRTZGNzI2NzJGNkU3MzJGNjQ2OTY0MkY3NjMxNjI2OTY0Nzg0QzY0Njk2NDNBNjg2NTY0NjU3MjYxM0E3NDY1NzM3NDZFNjU3NDNBN0EzNTUyNjU0NTcwNjQ0MjVBNkU2RjM1Mzg1ODQ2MzU3OTZGNDY2NzZENzI3OTM1NjU3Nzc3Njg0NzRFNDY2ODYzNkY3ODZFNTg2MTU3NkY2QTc3NTYzNTU0NUYzMDJFMzAyRTM0MzUzNjM3MzIzMTMyNzI3NjY1NzI2OTY2Njk2MzYxNzQ2OTZGNkU0RDY1NzQ2ODZGNjQ4MUE0NjI2OTY0Nzg1OTY0Njk2NDNBNjg2NTY0NjU3MjYxM0E3NDY1NzM3NDZFNjU3NDNBN0EzNTUyNjU0NTcwNjQ0MjVBNkU2RjM1Mzg1ODQ2MzU3OTZGNDY2NzZENzI3OTM1NjU3Nzc3Njg0NzRFNDY2ODYzNkY3ODZFNTg2MTU3NkY2QTc3NTYzNTU0NUYzMDJFMzAyRTM0MzUzNjM3MzIzMTMyMjM2NDY5NjQyRDcyNkY2Rjc0MkQ2QjY1Nzk2NDc0Nzk3MDY1NzgxQTQ1NjQzMjM1MzUzMTM5NTY2NTcyNjk2NjY5NjM2MTc0Njk2RjZFNEI2NTc5MzIzMDMxMzg2QTYzNkY2RTc0NzI2RjZDNkM2NTcyNzg0QzY0Njk2NDNBNjg2NTY0NjU3MjYxM0E3NDY1NzM3NDZFNjU3NDNBN0EzNTUyNjU0NTcwNjQ0MjVBNkU2RjM1Mzg1ODQ2MzU3OTZGNDY2NzZENzI3OTM1NjU3Nzc3Njg0NzRFNDY2ODYzNkY3ODZFNTg2MTU3NkY2QTc3NTYzNTU0NUYzMDJFMzAyRTM0MzUzNjM3MzIzMTMyNkY3MDc1NjI2QzY5NjM0QjY1Nzk0MjYxNzM2NTM1Mzg3ODJDMzU1MjY1NDU3MDY0NDI1QTZFNkYzNTM4NTg0NjM1Nzk2RjQ2Njc2RDcyNzkzNTY1Nzc3NzY4NDc0RTQ2Njg2MzZGNzg2RTU4NjE1NzZGNkE3NzU2MzU1NDZGNjE3MzczNjU3Mjc0Njk2RjZFNEQ2NTc0Njg2RjY0ODE3ODU5NjQ2OTY0M0E2ODY1NjQ2NTcyNjEzQTc0NjU3Mzc0NkU2NTc0M0E3QTM1NTI2NTQ1NzA2NDQyNUE2RTZGMzUzODU4NDYzNTc5NkY0NjY3NkQ3Mjc5MzU2NTc3Nzc2ODQ3NEU0NjY4NjM2Rjc4NkU1ODYxNTc2RjZBNzc1NjM1NTQ1RjMwMkUzMDJFMzQzNTM2MzczMjMxMzIyMzY0Njk2NDJENzI2RjZGNzQyRDZCNjU3OTZFNjE3NTc0Njg2NTZFNzQ2OTYzNjE3NDY5NkY2RTgxNzg1OTY0Njk2NDNBNjg2NTY0NjU3MjYxM0E3NDY1NzM3NDZFNjU3NDNBN0EzNTUyNjU0NTcwNjQ0MjVBNkU2RjM1Mzg1ODQ2MzU3OTZGNDY2NzZENzI3OTM1NjU3Nzc3Njg0NzRFNDY2ODYzNkY3ODZFNTg2MTU3NkY2QTc3NTYzNTU0NUYzMDJFMzAyRTM0MzUzNjM3MzIzMTMyMjM2NDY5NjQyRDcyNkY2Rjc0MkQ2QjY1Nzk2NzczNjU3Mjc2Njk2MzY1ODFBMzYyNjk2NDc4NTY2NDY5NjQzQTY4NjU2NDY1NzI2MTNBNzQ2NTczNzQ2RTY1NzQzQTdBMzU1MjY1NDU3MDY0NDI1QTZFNkYzNTM4NTg0NjM1Nzk2RjQ2Njc2RDcyNzkzNTY1Nzc3NzY4NDc0RTQ2Njg2MzZGNzg2RTU4NjE1NzZGNkE3NzU2MzU1NDVGMzAyRTMwMkUzNDM1MzYzNzMyMzEzMjIzNzM2NTcyNzY2OTYzNjUyRDMxNjQ3NDc5NzA2NTZENEM2OTZFNkI2NTY0NDQ2RjZENjE2OTZFNzM2RjczNjU3Mjc2Njk2MzY1NDU2RTY0NzA2RjY5NkU3NDczNjg3NDc0NzA3MzNBMkYyRjY3Njk3NDY4NzU2MjJFNjM2RjZEMkY=",
+          "contentType": "*/*",
+          "encoded": "base64"
+        },
+        "headers": {
+          "Content-Type": [
+            "application/did+cbor"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "contentType",
+                  "value": "text/plain"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for resolving a DID document in JSON format",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a DID document"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/did+json"
+          ]
+        },
+        "method": "GET",
+        "path": "/universal-resolver/identifiers/did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.1723780"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "assertionMethod": [
+              "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#did-root-key"
+            ],
+            "authentication": [
+              "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#did-root-key"
+            ],
+            "id": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212",
+            "service": [
+              {
+                "id": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#service-1",
+                "serviceEndpoint": "https://example.com/",
+                "type": "LinkedDomains"
+              }
+            ],
+            "verificationMethod": [
+              {
+                "controller": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212",
+                "id": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#did-root-key",
+                "publicKeyBase58": "5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T",
+                "type": "Ed25519VerificationKey2018"
+              }
+            ]
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/did+json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for resolving a DID document in JSON-LD format",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a DID document"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/did+ld+json"
+          ]
+        },
+        "method": "GET",
+        "path": "/universal-resolver/identifiers/did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.1723780"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "@context": "https://www.w3.org/ns/did/v1",
+            "assertionMethod": [
+              "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#did-root-key"
+            ],
+            "authentication": [
+              "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#did-root-key"
+            ],
+            "id": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212",
+            "service": [
+              {
+                "id": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#service-1",
+                "serviceEndpoint": "https://example.com/",
+                "type": "LinkedDomains"
+              }
+            ],
+            "verificationMethod": [
+              {
+                "controller": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212",
+                "id": "did:hedera:testnet:z5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T_0.0.4567212#did-root-key",
+                "publicKeyBase58": "5ReEpdBZno58XF5yoFgmry5ewwhGNFhcoxnXaWojwV5T",
+                "type": "Ed25519VerificationKey2018"
+              }
+            ]
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/did+ld+json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for supported methods properties",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a list of properties for hedera DID methods of resolver"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/did+json"
+          ]
+        },
+        "method": "GET",
+        "path": "/universal-resolver/properties"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "driver-0": {
+              "http": {
+                "pattern": "^did:hedera:(mainnet|testnet):\\w+_(\\d\\.){2}\\d+$",
+                "resolverUri": "https://identity-service.dev.hashgraph-group.com/",
+                "testIdentifiers": [
+                  "did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.1723780",
+                  "did:hedera:mainnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.153291",
+                  "did:hedera:testnet:z6MknSnvSESWvijDEysG1wHGnaiZSLSkQEXMECWvXWnd1uaJ_0.0.114517"
+                ]
+              }
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/did+json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {},
+          "status": {}
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pactRust": {
+      "ffi": "0.4.22",
+      "models": "1.2.3"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "identity-service"
+  }
+}
