@@ -21,10 +21,10 @@ jobs:
     environment: ${{inputs.environment}}
     steps:
       - name: Generate .env file
-        run: echo "${{ secrets.env_vars }}" > .env
+        run: echo "${{ secrets.env_vars }}" > test
 
       - name: Upload .env as artifact
         uses: actions/upload-artifact@v3
         with:
           name: env-file
-          path: .env
+          path: test
