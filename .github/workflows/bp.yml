@@ -20,9 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{inputs.environment}}
     steps:
-      - name: Set rev.txt 🛠️
-        run: git show -s --format="%ai %H %s %aN" HEAD > rev.txt
-
       - name: Generate .env file
         run: |
           echo "${{ secrets.env_vars }}" > .env
