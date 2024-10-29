@@ -13,4 +13,4 @@ jobs:
       app: 'frontend'
     secrets:
       ENV_SECRET: ${{ secrets.ENV_SECRET }}
-      ENV_VAR: ${{ vars.ENV_VAR }}
+#      ENV_VAR: ${{ vars.ENV_VAR }}
