@@ -7,12 +7,10 @@ on:
         description: "Environment"
         required: false
         type: string
-
     secrets:
       env_vars:
         description: "Environment variables for .env file"
         required: false
-
 
 jobs:
   build-and-push:

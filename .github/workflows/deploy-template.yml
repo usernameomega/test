@@ -9,6 +9,9 @@ on:
       app:
         type: string
         required: true
+      ENV_VAR:
+        required: true
+        type: string
     secrets:
       ENV_SECRET:
         required: true
@@ -21,4 +24,4 @@ jobs:
       environment: '${{ inputs.environment }}'
     secrets:
       env_vars: |
-        ENV_SECRET: ${{ vars.ENV_VAR }}
+        MY_NEXT_VAR: ${{ inputs.ENV_VAR }}
