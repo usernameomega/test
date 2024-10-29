@@ -22,6 +22,7 @@ jobs:
     uses: ./.github/workflows/bp.yml
     with:
       environment: '${{ inputs.environment }}'
+      ENV_VAR: ${{ vars.ENV_VAR }}
     secrets:
       env_vars: |
-        MY_NEXT_VAR: ${{ inputs.ENV_VAR }}
+        MY_NEXT_VAR: '${{ inputs.ENV_VAR }}'
