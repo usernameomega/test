@@ -1,0 +1,16 @@
+name: DEV Build/Push/Deploy
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+
+  frontend:
+    uses: ./.github/workflows/deploy-template.yml
+    with:
+      environment: 'development'
+      app: 'frontend'
+    secrets:
+      ENV_SECRET: ${{ secrets.ENV_SECRET }}
+      ENV_VAR: ${{ vars.ENV_VAR }}

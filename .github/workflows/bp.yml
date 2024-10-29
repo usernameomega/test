@@ -1,0 +1,29 @@
+name: Build and Push 📦
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: "Environment"
+        required: false
+        type: string
+
+    secrets:
+      env_vars:
+        description: "Environment variables for .env file"
+        required: false
+
+
+jobs:
+  build-and-push:
+    name: Build and Push 📦
+    runs-on: ubuntu-latest
+    environment: ${{inputs.environment}}
+    steps:
+      - name: Set rev.txt 🛠️
+        run: git show -s --format="%ai %H %s %aN" HEAD > rev.txt
+
+      - name: Generate .env file
+        run: |
+          echo "${{ secrets.env_vars }}" > .env
+          cat .env
