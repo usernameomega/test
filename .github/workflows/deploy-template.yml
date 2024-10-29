@@ -24,4 +24,4 @@ jobs:
       environment: '${{ inputs.environment }}'
     secrets:
       env_vars: |
-        MY_NEXT_VAR: '${{ inputs.ENV_VAR }}'
+        MY_NEXT_VAR: '${{ vars.ENV_VAR }}'
