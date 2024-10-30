@@ -14,10 +14,10 @@ jobs:
 
   call-build-and-push:
     uses: ./.github/workflows/bp.yml
+    environment: ${{ inputs.environment }}
     with:
       environment: '${{ inputs.environment }}'
+    secrets:
       env_vars: |
-        MY_NEXT_VAR_1: ${{ vars.ENV_VAR }}
-#    secrets:
-#      env_vars: |
-#        MY_NEXT_VAR: '${{ vars.ENV_VAR }}'
+        MY_NEXT_VAR: '${{ vars.ENV_VAR }}'
+        
