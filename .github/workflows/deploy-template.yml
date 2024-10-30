@@ -12,6 +12,9 @@ on:
 #    secrets:
 #      NEXT_VAR1:
 #        required: true
+    secrets:
+      env_vars:
+        required: true
 
 jobs:
 
@@ -19,7 +22,6 @@ jobs:
     uses: ./.github/workflows/bp.yml
     with:
       environment: '${{ inputs.environment }}'
-#    secrets:
-#      env_vars: |
-#        NEXT_VAR1: '${{ secrets.NEXT_VAR1}}'
+    secrets:
+      env_vars: ${{ secrets.env_vars}}
         
