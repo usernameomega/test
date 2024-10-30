@@ -9,8 +9,6 @@ on:
       app:
         type: string
         required: true
-    secrets:
-      ENV_SECRET: ${{ secrets.ENV_SECRET }}
 jobs:
 
   call-build-and-push:
