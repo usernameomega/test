@@ -12,4 +12,5 @@ jobs:
     with:
       environment: 'development'
       app: 'frontend'
-    secrets: inherit
+    secrets:
+      ENV_SECRET: ${{ secrets.ENV_SECRET }}

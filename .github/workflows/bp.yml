@@ -16,10 +16,10 @@ jobs:
   build-and-push:
     name: Build and Push 📦
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{inputs.environment}}
     steps:
       - name: Generate .env file
-        run: echo ${{ secrets.env_vars }} > env
+        run: echo "${{ inputs.env_vars }}" > env
 
       - name: Upload .env as artifact
         uses: actions/upload-artifact@v3
