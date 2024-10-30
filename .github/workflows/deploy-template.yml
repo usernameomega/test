@@ -10,7 +10,7 @@ on:
         type: string
         required: true
       ENV_VAR:
-        required: true
+        required: false
         type: string
     secrets:
       ENV_SECRET:
