@@ -6,6 +6,9 @@ on:
       environment:
         type: string
         required: true
+      app:
+        type: string
+        required: true
 
 jobs:
 
