@@ -16,6 +16,11 @@ jobs:
     uses: ./.github/workflows/bp.yml
     with:
       environment: '${{ inputs.environment }}'
-    secrets:
-      env_vars: |
-        MY_NEXT_VAR: '${{ secrets.ENV_SECRET }}'
+#    secrets:
+#      env_vars: |
+#        MY_NEXT_VAR: '${{ secrets.ENV_SECRET }}'
+
+    steps:
+      - name: Generate .env file
+        run: | 
+         echo ${{ vars.ENV_VAR }} > ${{ secrets.env_vars }}
