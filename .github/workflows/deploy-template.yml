@@ -9,22 +9,13 @@ on:
       app:
         type: string
         required: true
-    secrets:
-      env_vars: ${{ secrets.ENV_SECRET }}
+
 jobs:
-  prepare-anus:
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.environment }}
-    steps:
-      - name: Generate .env file
-        run: |
-          echo ${{ vars.ENV_VAR }} > ${{ secrets.env_vars }}      
 
   call-build-and-push:
     uses: ./.github/workflows/bp.yml
     with:
       environment: '${{ inputs.environment }}'
-#    secrets:
-#      env_vars: |
-#        MY_NEXT_VAR: '${{ secrets.ENV_SECRET }}'
+    secrets:
+      env_vars: |
+        MY_NEXT_VAR: '${{ secrets.ENV_SECRET }}'
