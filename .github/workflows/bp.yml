@@ -9,19 +9,19 @@ on:
         type: string
       env_vars:
         type: string
-    secrets:
-      env_vars:
-        description: "Environment variables for .env file"
-        required: false
+#    secrets:
+#      env_vars:
+#        description: "Environment variables for .env file"
+#        required: false
 
 jobs:
   build-and-push:
     name: Build and Push 📦
     runs-on: ubuntu-latest
-    environment: ${{inputs.environment}}
+    environment: ${{ inputs.environment }}
     steps:
       - name: Generate .env file
-        run: echo "${{ inputs.env_vars }}" > env
+        run: echo ${{ inputs.env_vars }} > env
 
       - name: Upload .env as artifact
         uses: actions/upload-artifact@v3
