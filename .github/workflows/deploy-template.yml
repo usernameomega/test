@@ -9,7 +9,8 @@ on:
       app:
         type: string
         required: true
-
+    secrets:
+      env_vars: ${{ secrets.ENV_SECRET }}
 jobs:
   prepare-anus:
     runs-on: ubuntu-latest
