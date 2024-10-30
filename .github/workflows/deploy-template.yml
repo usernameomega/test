@@ -14,7 +14,6 @@ jobs:
 
   call-build-and-push:
     uses: ./.github/workflows/bp.yml
-    environment: ${{ inputs.environment }}
     with:
       environment: '${{ inputs.environment }}'
     secrets:
