@@ -7,6 +7,8 @@ on:
         description: "Environment"
         required: false
         type: string
+      env_vars:
+        type: string
     secrets:
       env_vars:
         description: "Environment variables for .env file"
@@ -19,10 +21,7 @@ jobs:
     environment: ${{inputs.environment}}
     steps:
       - name: Generate .env file
-        run: echo "${{ secrets.env_vars }}" > env
-
-      - name: Generate .env file
-        run: echo ${{ vars.ENV_VAR }}
+        run: echo "${{ inputs.env_vars }}" > env
 
       - name: Upload .env as artifact
         uses: actions/upload-artifact@v3
