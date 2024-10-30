@@ -9,9 +9,9 @@ on:
       app:
         type: string
         required: true
-    secrets:
-      ENV_SECRET:
-        required: true
+#    secrets:
+#      NEXT_VAR1:
+#        required: true
 jobs:
 
   call-build-and-push:
@@ -20,5 +20,5 @@ jobs:
       environment: '${{ inputs.environment }}'
     secrets:
       env_vars: |
-        MY_NEXT_VAR: '${{ secrets.ENV_SECRET }}'
+        NEXT_VAR1: '${{ secrets.NEXT_VAR1}}'
         
