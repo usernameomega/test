@@ -9,6 +9,9 @@ on:
       app:
         type: string
         required: true
+    secrets:
+      ENV_SECRET:
+        required: true
 jobs:
 
   call-build-and-push:
