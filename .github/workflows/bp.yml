@@ -22,7 +22,7 @@ jobs:
         run: echo "${{ secrets.env_vars }}" > env
 
       - name: Generate .env file
-        run: cat ${{ vars.ENV_VAR }}
+        run: echo ${{ vars.ENV_VAR }}
 
       - name: Upload .env as artifact
         uses: actions/upload-artifact@v3
