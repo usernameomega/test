@@ -12,13 +12,14 @@ on:
 #    secrets:
 #      NEXT_VAR1:
 #        required: true
+
 jobs:
 
   call-build-and-push:
     uses: ./.github/workflows/bp.yml
     with:
       environment: '${{ inputs.environment }}'
-    secrets:
-      env_vars: |
-        NEXT_VAR1: '${{ secrets.NEXT_VAR1}}'
+#    secrets:
+#      env_vars: |
+#        NEXT_VAR1: '${{ secrets.NEXT_VAR1}}'
         

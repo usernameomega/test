@@ -13,3 +13,6 @@ jobs:
       app: 'frontend'
 #    secrets:
 #      NEXT_VAR1: ${{ secrets.NEXT_VAR1}}
+    secrets:
+      env_vars: |
+        NEXT_VAR1: '${{ secrets.NEXT_VAR1}}'
