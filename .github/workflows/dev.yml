@@ -15,4 +15,4 @@ jobs:
 #      NEXT_VAR1: ${{ secrets.NEXT_VAR1}}
     secrets:
       env_vars: |
-        NEXT_VAR1: '${{ secrets.NEXT_VAR1}}'
+        NEXT_VAR1: '${{ secrets.ENV_SECRET}}'
