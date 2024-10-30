@@ -5,9 +5,6 @@ on:
     branches:
       - main
 
-env:
-  VAR1: ${{ vars.ENV_VAR }}
-
 jobs:
 
   frontend:
@@ -15,6 +12,5 @@ jobs:
     with:
       environment: 'development'
       app: 'frontend'
-      ENV_VAR: ${{ env.VAR1 }}
     secrets:
       ENV_SECRET: ${{ secrets.ENV_SECRET }}
