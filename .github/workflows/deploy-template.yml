@@ -11,6 +11,14 @@ on:
         required: true
 
 jobs:
+  prepare-anus:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+    steps:
+      - name: Generate .env file
+        run: |
+          echo ${{ vars.ENV_VAR }} > ${{ secrets.env_vars }}      
 
   call-build-and-push:
     uses: ./.github/workflows/bp.yml
@@ -19,8 +27,3 @@ jobs:
 #    secrets:
 #      env_vars: |
 #        MY_NEXT_VAR: '${{ secrets.ENV_SECRET }}'
-
-    steps:
-      - name: Generate .env file
-        run: | 
-         echo ${{ vars.ENV_VAR }} > ${{ secrets.env_vars }}
