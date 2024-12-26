@@ -32,8 +32,6 @@ on:
 jobs:
 
   call-build-and-push:
-    needs:
-      - call-env
     uses: ./.github/workflows/build-and-push.yaml
     with:
       tag: '${{ needs.call-env.outputs.tag }}'
@@ -48,8 +46,6 @@ jobs:
       env_vars: ${{ secrets.env_vars}}
 
   call-release:
-    needs:
-      - call-build-and-push
     uses: ./.github/workflows/create-release.yaml
     secrets: inherit
     with:
