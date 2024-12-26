@@ -34,7 +34,7 @@ jobs:
   call-build-and-push:
     needs:
       - call-env
-    uses: .github/workflows/build-and-push.yaml
+    uses: ./.github/workflows/build-and-push.yaml
     with:
       tag: '${{ needs.call-env.outputs.tag }}'
       dockerfile: ./docker/Dockerfile
@@ -50,7 +50,7 @@ jobs:
   call-release:
     needs:
       - call-build-and-push
-    uses: .github/workflows/create-release.yaml
+    uses: ./.github/workflows/create-release.yaml
     secrets: inherit
     with:
       tag: 'mtg-fe-${{ needs.call-env.outputs.tag }}'
