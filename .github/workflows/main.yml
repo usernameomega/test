@@ -7,7 +7,6 @@ on:
 
 jobs:
   frontend:
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/deploy-template.yml
     with:
       environment: 'development'
