@@ -32,7 +32,6 @@ on:
 jobs:
 
   call-build-and-push:
-    runs-on: ubuntu-24.04
     uses: ./.github/workflows/build-and-push.yaml
     with:
       tag: '${{ needs.call-env.outputs.tag }}'
