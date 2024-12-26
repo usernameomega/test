@@ -5,9 +5,8 @@ on:
     branches:
       - main
 jobs:
-
   frontend:
-    uses: .github/workflows/deploy-template.yml
+    uses: ./.github/workflows/deploy-template.yml
     with:
       environment: 'development'
       app: 'frontend'
