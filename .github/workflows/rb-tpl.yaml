@@ -44,3 +44,4 @@ jobs:
         run: |
           cd apps/service/overlays/${{ steps.determine_folder.outputs.folder }}
           yq eval '.images[].newTag = "${{ inputs.tag }}"' -i kustomization.yaml
+          cat kustomization.yaml
