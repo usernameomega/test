@@ -45,5 +45,5 @@ jobs:
 
       - name: Update Docker Image Tag 🏷️
         run: |
-          cd ./apps/service/overlays/${{ steps.determine_folder.outputs.folder }}
-          cat ./apps/service/overlays/${{ steps.determine_folder.outputs.folder }}/kustomization.yaml
+          cd apps/service/overlays/${{ steps.determine_folder.outputs.folder }}
+          cat apps/service/overlays/${{ steps.determine_folder.outputs.folder }}/kustomization.yaml
