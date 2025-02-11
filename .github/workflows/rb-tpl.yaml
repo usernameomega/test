@@ -11,6 +11,10 @@ on:
         description: "Set Project Environment"
         required: true
         type: string
+      app:
+        description: 'Choose app'
+        required: true
+        type: string
 
 jobs:
   rollback:
