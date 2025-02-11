@@ -43,10 +43,10 @@ jobs:
           fi
           cat $GITHUB_OUTPUT
 
-      - name: List Directory Contents
-        run: |
-          ls -R
-          pwd
+#      - name: List Directory Contents
+#        run: |
+#          ls -R
+#          pwd
       - name: Update Docker Image Tag 🏷️
         run: |
           cat apps/service/overlays/${{ steps.determine_folder.outputs.folder }}/kustomization.yaml
