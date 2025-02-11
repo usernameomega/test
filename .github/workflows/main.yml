@@ -3,7 +3,7 @@ name: DEV Build/Push/Deploy
 on:
   push:
     branches:
-      - main
+      - main2
 
 jobs:
   frontend:
