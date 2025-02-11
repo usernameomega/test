@@ -1,0 +1,170 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: tha-dev-identity-service
+resources:
+  - ../../base
+  - virtual-service.yaml
+helmCharts:
+  - name: webapp
+    releaseName: identity-service
+    namespace: "tha-dev-identity-service"
+    version: 0.0.29
+    repo: https://swiss-digital-assets-institute.github.io/helm-charts
+    additionalValuesFiles:
+      - ../../../../values/globals/values.yaml
+      - ../../../../values/envs/dev/values.yaml
+      - ../../../../values/clusters/tha-dev-che-eks/values.yaml
+    valuesInline:
+      name: "identity-service"
+      image:
+        repository: 009160051778.dkr.ecr.eu-central-2.amazonaws.com/tha-dev-identity-service-api
+        tag: "65486a19"
+      quota:
+        enabled: false
+      istio:
+        virtualServices:
+          public: true
+      monitoring:
+        serviceMonitor:
+          enabled: true
+          extraPort:
+            enabled: true
+      container:
+        port: 3000
+      service:
+        port:
+          targetPort: 3000
+      envs:
+        - name: ENV
+          value: development
+        - name: OTEL_SERVICE_NAME
+          value: identity-service
+        - name: OTEL_ENDPOINT
+          value: http://otel-collector.observability.svc.cluster.local:4318/v1/traces
+        - name: OTEL_METRICS_PORT
+          value: 9090
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1024Mi
+        requests:
+          cpu: 200m
+          memory: 256Mi
+      livenessProbe:
+        enabled: false
+      readinessProbe:
+        enabled: false
+      externalSecrets:
+        enabled: true
+        secretStoreRef:
+          name: vault-backend
+        secrets:
+          - secretKey: HEDERA_DID_RESOLVER_URI
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: HEDERA_DID_RESOLVER_URI
+          - secretKey: HEDERA_TEST_IDENTIFIERS
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: HEDERA_TEST_IDENTIFIERS
+          - secretKey: KEY_TEST_IDENTIFIERS
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: KEY_TEST_IDENTIFIERS
+          - secretKey: RELAYER_ACCOUNT_ID
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: RELAYER_ACCOUNT_ID
+          - secretKey: RELAYER_PRIVATE_KEY
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: RELAYER_PRIVATE_KEY
+          - secretKey: RELAYER_PUBLIC_KEY
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: RELAYER_PUBLIC_KEY
+          - secretKey: SWAGGERHUB_KEY
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: SWAGGERHUB_KEY
+          - secretKey: SWAGGER_HUB_BASE_PATH
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: SWAGGER_HUB_BASE_PATH
+          - secretKey: UNIVERSAL_RESOLVER_RESOURCE_PATH
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: UNIVERSAL_RESOLVER_RESOURCE_PATH
+          - secretKey: UNIVERSAL_RESOLVER_VERSION
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: UNIVERSAL_RESOLVER_VERSION
+          - secretKey: VAULT_API_URL
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: VAULT_API_URL
+          - secretKey: VAULT_APP_ROLE_ID
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: VAULT_APP_ROLE_ID
+          - secretKey: VAULT_APP_ROLE_SECRET_ID
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: VAULT_APP_ROLE_SECRET_ID
+          - secretKey: WEB_TEST_IDENTIFIERS
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              property: WEB_TEST_IDENTIFIERS
+
+  - name: vault
+    namespace: tha-dev-identity-service
+    includeCRDs: true
+    releaseName: identity-service-vault
+    version: 0.28.1
+    repo: https://helm.releases.hashicorp.com
+    valuesInline:
+      fullname: identity-service-vault
+      injector:
+        enabled: false
+      server:
+        podSecurityContext:
+          fsGroup: 65534
+          runAsUser: 0
+        serviceAccount:
+          create: true
+          annotations:
+            eks.amazonaws.com/role-arn: arn:aws:iam::009160051778:role/tha-dev-identity-service-vault
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 250m
+          limits:
+            memory: 256Mi
+            cpu: 250m
+        service:
+          enabled: true
+          port: 8200
+          targetPort: 8200
+        dataStorage:
+          enabled: false
+        standalone:
+          enabled: true
+          config: |
+            ui = true
+            listener "tcp" {
+              address= "0.0.0.0:8200"
+              tls_disable = 1
+            }
+            seal "awskms" {
+              max_lease_ttl = "8760h"
+            }
+            storage "s3" {}
+          disruptionBudget:
+            enabled: true
+            maxUnavailable: 1
+        ingress:
+          enabled: false
+        extraEnvironmentVars:
+          AWS_REGION: eu-central-2
+          AWS_S3_BUCKET: tha-dev-identity-service-vault
+          VAULT_AWSKMS_SEAL_KEY_ID: 4a2a011c-f98e-4b0d-ae7f-47311b140207

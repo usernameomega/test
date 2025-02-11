@@ -39,9 +39,8 @@ jobs:
           echo "folder=govno" >> $GITHUB_OUTPUT
           fi
           cat $GITHUB_OUTPUT
-#      - name: Update Docker Image Tag 🏷️
-#        run: |
-#          cd apps/${{ inputs.repository }}/overlays/${{ steps.determine_folder.outputs.folder }}
-#          OLD_TAG=$(cat kustomization.yaml | grep 'tag:' |  awk '{print $2}')
-#          NEW_TAG=${{ inputs.tag }}
-#          sed -i "s|$OLD_TAG|$NEW_TAG|g" kustomization.yaml
+
+      - name: Update Docker Image Tag 🏷️
+        run: |
+          cd apps/service/overlays/${{ steps.determine_folder.outputs.folder }}
+          yq eval '.images[].newTag = "${{ inputs.tag }}"' -i kustomization.yaml
