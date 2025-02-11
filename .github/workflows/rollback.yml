@@ -29,5 +29,3 @@ jobs:
       tag: ${{ inputs.tag }}
       environment: ${{ inputs.environment }}
       app: ${{ inputs.app }}
-    needs:
-      - call-env
