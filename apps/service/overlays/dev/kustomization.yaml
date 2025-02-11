@@ -1,13 +1,13 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: tha-dev-identity-service
+namespace: tha-dev-transaction-gateway
 resources:
   - ../../base
   - virtual-service.yaml
 helmCharts:
   - name: webapp
-    releaseName: identity-service
-    namespace: "tha-dev-identity-service"
+    releaseName: transaction-gateway-api
+    namespace: tha-dev-transaction-gateway
     version: 0.0.29
     repo: https://swiss-digital-assets-institute.github.io/helm-charts
     additionalValuesFiles:
@@ -15,10 +15,14 @@ helmCharts:
       - ../../../../values/envs/dev/values.yaml
       - ../../../../values/clusters/tha-dev-che-eks/values.yaml
     valuesInline:
-      name: "identity-service"
+      name: "transaction-gateway-api"
       image:
-        repository: 009160051778.dkr.ecr.eu-central-2.amazonaws.com/tha-dev-identity-service-api
-        tag: "65486a19"
+        repository: 009160051778.dkr.ecr.eu-central-2.amazonaws.com/tha-dev-transaction-gateway-api
+        tag: 71682ac2
+      autoscaling:
+        enabled: true
+        minReplicas: 2
+        maxReplicas: 5
       quota:
         enabled: false
       istio:
@@ -29,16 +33,16 @@ helmCharts:
           enabled: true
           extraPort:
             enabled: true
-      container:
-        port: 3000
       service:
         port:
           targetPort: 3000
+      container:
+        port: 3000
       envs:
         - name: ENV
           value: development
         - name: OTEL_SERVICE_NAME
-          value: identity-service
+          value: transaction-gateway
         - name: OTEL_ENDPOINT
           value: http://otel-collector.observability.svc.cluster.local:4318/v1/traces
         - name: OTEL_METRICS_PORT
@@ -49,91 +53,319 @@ helmCharts:
           memory: 1024Mi
         requests:
           cpu: 200m
-          memory: 256Mi
+          memory: 512Mi
       livenessProbe:
-        enabled: false
+        enabled: true
+        path: /v1/health
+        initialDelaySeconds: 30
+        periodSeconds: 15
+        timeoutSeconds: 10
+        successThreshold: 1
+        failureThreshold: 6
       readinessProbe:
-        enabled: false
+        enabled: true
+        path: /v1/health
+        initialDelaySeconds: 30
+        periodSeconds: 5
+        timeoutSeconds: 3
+        successThreshold: 1
+        failureThreshold: 3
       externalSecrets:
         enabled: true
         secretStoreRef:
           name: vault-backend
         secrets:
-          - secretKey: HEDERA_DID_RESOLVER_URI
+          - secretKey: API_KEY
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
-              property: HEDERA_DID_RESOLVER_URI
-          - secretKey: HEDERA_TEST_IDENTIFIERS
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: API_KEY
+          - secretKey: AWS_ACCESS_KEY_ID
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
-              property: HEDERA_TEST_IDENTIFIERS
-          - secretKey: KEY_TEST_IDENTIFIERS
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: AWS_ACCESS_KEY_ID
+          - secretKey: AWS_SECRET_ACCESS_KEY
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
-              property: KEY_TEST_IDENTIFIERS
-          - secretKey: RELAYER_ACCOUNT_ID
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: AWS_SECRET_ACCESS_KEY
+          - secretKey: AWS_COGNITO_APP_CLIENT_ID
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
-              property: RELAYER_ACCOUNT_ID
-          - secretKey: RELAYER_PRIVATE_KEY
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: AWS_COGNITO_APP_CLIENT_ID
+          - secretKey: AWS_COGNITO_USER_POOL_ID
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
-              property: RELAYER_PRIVATE_KEY
-          - secretKey: RELAYER_PUBLIC_KEY
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: AWS_COGNITO_USER_POOL_ID
+          - secretKey: AWS_REGION
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
-              property: RELAYER_PUBLIC_KEY
-          - secretKey: SWAGGERHUB_KEY
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: AWS_REGION
+          - secretKey: DATABASE_URL
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
-              property: SWAGGERHUB_KEY
-          - secretKey: SWAGGER_HUB_BASE_PATH
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: DATABASE_URL
+          - secretKey: DS_API_KEY
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
-              property: SWAGGER_HUB_BASE_PATH
-          - secretKey: UNIVERSAL_RESOLVER_RESOURCE_PATH
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: DS_API_KEY
+          - secretKey: DS_API_URL
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
-              property: UNIVERSAL_RESOLVER_RESOURCE_PATH
-          - secretKey: UNIVERSAL_RESOLVER_VERSION
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: DS_API_URL
+          - secretKey: HASHGRAPH_MIRROR_NODE_URL
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
-              property: UNIVERSAL_RESOLVER_VERSION
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: HASHGRAPH_MIRROR_NODE_URL
+          - secretKey: HASHGRAPH_NETWORK
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: HASHGRAPH_NETWORK
+          - secretKey: SERVICE_FEE_MARGIN
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: SERVICE_FEE_MARGIN
+          - secretKey: SES_SENDER
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: SES_SENDER
           - secretKey: VAULT_API_URL
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
               property: VAULT_API_URL
           - secretKey: VAULT_APP_ROLE_ID
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
               property: VAULT_APP_ROLE_ID
           - secretKey: VAULT_APP_ROLE_SECRET_ID
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
               property: VAULT_APP_ROLE_SECRET_ID
-          - secretKey: WEB_TEST_IDENTIFIERS
+          - secretKey: SQS_QUEUE_URL
             remoteRef:
-              key: secrets/tha-dev-che-eks/dev/identity-service/backend
-              property: WEB_TEST_IDENTIFIERS
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: SQS_QUEUE_URL
+          - secretKey: VALIDATION_CLOUD_MIRRORNODE_URL
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: VALIDATION_CLOUD_MIRRORNODE_URL
+          - secretKey: VALIDATION_CLOUD_API_KEY
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/api
+              property: VALIDATION_CLOUD_API_KEY
+
+  - name: webapp
+    releaseName: transaction-gateway-cron
+    namespace: "tha-dev-transaction-gateway"
+    version: 0.0.29
+    repo: https://swiss-digital-assets-institute.github.io/helm-charts
+    valuesInline:
+      name: "transaction-gateway-cron"
+      namespace:
+        enabled: false
+      global:
+        env: dev2
+      podAnnotations:
+        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+      image:
+        repository: 009160051778.dkr.ecr.eu-central-2.amazonaws.com/tha-dev-transaction-gateway-cron
+        tag: 71682ac2
+      autoscaling:
+        enabled: false
+      quota:
+        enabled: false
+      istio:
+        virtualServices:
+          enabled: false
+      service:
+        port:
+          targetPort: 3000
+      container:
+        port: 3000
+
+      envs:
+        - name: ENV
+          value: development
+        - name: OTEL_SERVICE_NAME
+          value: transaction-gateway-cron
+        - name: OTEL_ENDPOINT
+          value: http://otel-collector.observability.svc.cluster.local:4318/v1/traces
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1024Mi
+        requests:
+          cpu: 200m
+          memory: 256Mi
+      livenessProbe:
+        enabled: true
+        path: /v1/health
+        initialDelaySeconds: 30
+        periodSeconds: 15
+        timeoutSeconds: 10
+        successThreshold: 1
+        failureThreshold: 6
+      readinessProbe:
+        enabled: true
+        path: /v1/health
+        initialDelaySeconds: 30
+        periodSeconds: 5
+        timeoutSeconds: 3
+        successThreshold: 1
+        failureThreshold: 3
+      monitoring:
+        serviceMonitor:
+          enabled: true
+          extraPort:
+            enabled: true
+      externalSecrets:
+        enabled: true
+        secretStoreRef:
+          name: vault-backend
+        secrets:
+          - secretKey: AWS_ACCESS_KEY_ID
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: AWS_ACCESS_KEY_ID
+          - secretKey: AWS_REGION
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: AWS_REGION
+          - secretKey: AWS_SECRET_ACCESS_KEY
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: AWS_SECRET_ACCESS_KEY
+          - secretKey: BALANCE_TARGET
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: BALANCE_TARGET
+          - secretKey: BALANCE_THRESHOLD
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: BALANCE_THRESHOLD
+          - secretKey: COGNITO_ADMIN_GROUP_NAME
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: COGNITO_ADMIN_GROUP_NAME
+          - secretKey: COGNITO_USER_POOL_ID
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: COGNITO_USER_POOL_ID
+          - secretKey: DS_DATABASE_URL
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: DS_DATABASE_URL
+          - secretKey: HASHGRAPH_NETWORK
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: HASHGRAPH_NETWORK
+          - secretKey: MTG_DATABASE_URL
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: MTG_DATABASE_URL
+          - secretKey: SES_SENDER
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: SES_SENDER
+          - secretKey: VAULT_API_URL
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: VAULT_API_URL
+          - secretKey: VAULT_APP_ROLE_ID
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: VAULT_APP_ROLE_ID
+          - secretKey: VAULT_APP_ROLE_SECRET_ID
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: VAULT_APP_ROLE_SECRET_ID
+          - secretKey: SQS_QUEUE_URL
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: SQS_QUEUE_URL
+          - secretKey: REFILLER_THRESHOLD_BALANCE
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cron
+              property: REFILLER_THRESHOLD_BALANCE
+
+  - name: webapp
+    releaseName: transaction-gateway-cli
+    namespace: "tha-dev-transaction-gateway"
+    version: 0.0.29
+    repo: https://swiss-digital-assets-institute.github.io/helm-charts
+    additionalValuesFiles:
+      - ../../../../values/globals/values.yaml
+      - ../../../../values/envs/dev/values.yaml
+      - ../../../../values/clusters/tha-dev-che-eks/values.yaml
+    valuesInline:
+      name: "transaction-gateway-cli"
+      namespace:
+        enabled: false
+      image:
+        repository: 009160051778.dkr.ecr.eu-central-2.amazonaws.com/tha-dev-transaction-gateway-cli
+        tag: 71682ac2
+      autoscaling:
+        enabled: false
+      quota:
+        enabled: false
+      istio:
+        virtualServices:
+          enabled: false
+      service:
+        port:
+          targetPort: 3000
+      container:
+        port: 3000
+      envs:
+        - name: ENV
+          value: development
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 200m
+          memory: 256Mi
+      livenessProbe:
+        enabled: false
+      readinessProbe:
+        enabled: false
+      monitoring:
+        serviceMonitor:
+          enabled: false
+      externalSecrets:
+        enabled: true
+        secretStoreRef:
+          name: vault-backend
+        secrets:
+          - secretKey: VAULT_API_URL
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cli
+              property: VAULT_API_URL
+          - secretKey: VAULT_APP_ROLE_ID
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cli
+              property: VAULT_APP_ROLE_ID
+          - secretKey: VAULT_APP_ROLE_SECRET_ID
+            remoteRef:
+              key: secrets/tha-dev-che-eks/dev/transaction-gateway/cli
+              property: VAULT_APP_ROLE_SECRET_ID
 
   - name: vault
-    namespace: tha-dev-identity-service
     includeCRDs: true
-    releaseName: identity-service-vault
-    version: 0.28.1
+    releaseName: vault
+    namespace: tha-dev-transaction-gateway
+    version: "0.28.1"
     repo: https://helm.releases.hashicorp.com
     valuesInline:
-      fullname: identity-service-vault
+      fullnameOverride: vault
       injector:
         enabled: false
       server:
-        podSecurityContext:
-          fsGroup: 65534
-          runAsUser: 0
+        annotations:
+          proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
         serviceAccount:
           create: true
           annotations:
-            eks.amazonaws.com/role-arn: arn:aws:iam::009160051778:role/tha-dev-identity-service-vault
+            eks.amazonaws.com/role-arn: arn:aws:iam::009160051778:role/tha-dev-transaction-gateway-vault
         resources:
           requests:
             memory: 256Mi
@@ -141,10 +373,6 @@ helmCharts:
           limits:
             memory: 256Mi
             cpu: 250m
-        service:
-          enabled: true
-          port: 8200
-          targetPort: 8200
         dataStorage:
           enabled: false
         standalone:
@@ -162,9 +390,7 @@ helmCharts:
           disruptionBudget:
             enabled: true
             maxUnavailable: 1
-        ingress:
-          enabled: false
         extraEnvironmentVars:
           AWS_REGION: eu-central-2
-          AWS_S3_BUCKET: tha-dev-identity-service-vault
-          VAULT_AWSKMS_SEAL_KEY_ID: 4a2a011c-f98e-4b0d-ae7f-47311b140207
+          AWS_S3_BUCKET: tha-dev-transaction-gateway-vault
+          VAULT_AWSKMS_SEAL_KEY_ID: 9c55dd4d-ed55-484f-8fbb-80ebadbba828

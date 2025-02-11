@@ -19,7 +19,7 @@ on:
         type: choice
         options:
           - identity-service
-          - identity-service2
+          - transaction-gateway-cli
 
 jobs:
   rollback:
