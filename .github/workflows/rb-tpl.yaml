@@ -24,6 +24,9 @@ jobs:
       name: '${{ inputs.environment }}'
 
     steps:
+      - name: Clone the repository
+        uses: actions/checkout@v3
+
       - name: Determine folder
         id: determine_folder
         run: |
