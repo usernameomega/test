@@ -23,7 +23,7 @@ on:
 
 jobs:
   rollback:
-    uses: .github/workflows/rb-tpl.yaml
+    uses: ./.github/workflows/rb-tpl.yaml
     secrets: inherit
     with:
       tag: ${{ inputs.tag }}
