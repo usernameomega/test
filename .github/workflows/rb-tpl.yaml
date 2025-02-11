@@ -49,5 +49,5 @@ jobs:
 #          pwd
       - name: Update Docker Image Tag 🏷️
         run: |
-          yq eval '.images[].newTag = "${{ inputs.tag }}"' -i apps/service/overlays/${{ steps.determine_folder.outputs.folder }}/kustomization.yaml
+          yq eval '(.helmCharts[] | select(.valuesInline.name == "${{ inputs.app }}") | .valuesInline.image.tag) = "${{ inputs.tag }}"' apps/service/overlays/${{ steps.determine_folder.outputs.folder }}/kustomization.yaml
           cat apps/service/overlays/${{ steps.determine_folder.outputs.folder }}/kustomization.yaml

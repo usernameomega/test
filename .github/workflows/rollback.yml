@@ -18,8 +18,8 @@ on:
         required: true
         type: choice
         options:
-          - app1
-          - app2
+          - identity-service
+          - identity-service2
 
 jobs:
   rollback:
