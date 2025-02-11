@@ -52,5 +52,5 @@ jobs:
           else
           echo "App name not found: ${{ inputs.app }}""
           fi
-          yq eval '(.helmCharts[] | select(.valuesInline.name == "${{ inputs.app }}") | .valuesInline.image.tag) = "${{ inputs.tag }}"' kustomization.yaml
+#          yq eval '(.helmCharts[] | select(.valuesInline.name == "${{ inputs.app }}") | .valuesInline.image.tag) = "${{ inputs.tag }}"' kustomization.yaml
           cat kustomization.yaml
