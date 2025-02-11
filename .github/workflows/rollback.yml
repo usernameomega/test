@@ -1,0 +1,33 @@
+name: Rollback Development 🔙
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Set Docker Image Tag to RollBack"
+        required: true
+      environment:
+        description: 'choose environment'
+        required: true
+        type: choice
+        options:
+          - development
+          - production
+      app:
+        description: 'choose app'
+        required: true
+        type: choice
+        options:
+          - app1
+          - app2
+
+jobs:
+  rollback:
+    uses: .github/workflows/rb-tpl.yaml
+    secrets: inherit
+    with:
+      tag: ${{ inputs.tag }}
+      environment: ${{ inputs.environment }}
+      app: ${{ inputs.app }}
+    needs:
+      - call-env

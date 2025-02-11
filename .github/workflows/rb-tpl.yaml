@@ -1,0 +1,43 @@
+name: GitOps Rollback 🔙
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: "Set Docker Image Tag"
+        required: true
+        type: string
+      environment:
+        description: "Set Project Environment"
+        required: true
+        type: string
+
+jobs:
+  rollback:
+    name: GitOps Rollback 🔙
+    runs-on: ubuntu-24.04
+    environment:
+      name: '${{ inputs.environment }}'
+
+    steps:
+      - name: Determine folder
+        id: determine_folder
+        run: |
+          if [[ "${{ inputs.environment }}" == *"development"* ]]; then
+          echo "folder=dev" >> $GITHUB_OUTPUT
+          elif [[ "${{ inputs.environment }}" == *"production"* ]]; then
+          echo "folder=prd" >> $GITHUB_OUTPUT
+          elif [[ "${{ inputs.environment }}" == *"staging"* ]]; then
+          echo "folder=stg" >> $GITHUB_OUTPUT
+          elif [[ "${{ inputs.environment }}" == *"qa"* ]]; then
+          echo "folder=qa" >> $GITHUB_OUTPUT
+          else
+          echo "folder=govno" >> $GITHUB_OUTPUT
+          fi
+          cat $GITHUB_OUTPUT
+#      - name: Update Docker Image Tag 🏷️
+#        run: |
+#          cd apps/${{ inputs.repository }}/overlays/${{ steps.determine_folder.outputs.folder }}
+#          OLD_TAG=$(cat kustomization.yaml | grep 'tag:' |  awk '{print $2}')
+#          NEW_TAG=${{ inputs.tag }}
+#          sed -i "s|$OLD_TAG|$NEW_TAG|g" kustomization.yaml
