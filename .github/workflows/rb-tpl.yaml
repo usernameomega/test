@@ -47,7 +47,7 @@ jobs:
         run: |
           cd apps/service/overlays/${{ steps.determine_folder.outputs.folder }}
           if yq eval --exit-status '(.helmCharts[] | select(.valuesInline.name == "${{ inputs.app }}"))' kustomization.yaml > /dev/null 2>&1; then
-          yq eval -i '(.helmCharts[] | select(.valuesInline.name == "'${{ inputs.app }}") | .valuesInline.image.tag) = "${{ inputs.tag }}"' kustomization.yaml
+          yq eval -i '(.helmCharts[] | select(.valuesInline.name == "${{ inputs.app }}") | .valuesInline.image.tag) = "${{ inputs.tag }}"' kustomization.yaml
           echo "Tag updated successfully for app: ${{ inputs.app }}""
           else
           echo "App name not found: ${{ inputs.app }}""
