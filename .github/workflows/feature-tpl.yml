@@ -1,0 +1,20 @@
+name: Test Application 🔬
+
+on:
+  workflow_call:
+
+jobs:
+  test:
+    name: Test Application 🔬
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Run Tests 🧪
+        uses: isbang/compose-action@v2.0.0
+        with:
+          compose-file: "./docker/docker-compose.yml"
+          down-flags: "--volumes"
+          services: |
+            test

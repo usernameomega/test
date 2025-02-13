@@ -18,7 +18,7 @@ on:
         required: true
         type: choice
         options:
-          - identity-service
+          - transaction-gateway-cli
           - transaction-gateway-cli
 
 jobs:

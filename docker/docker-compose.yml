@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  test:
+    image: node:22
+    container_name: app_test
+#    working_dir: /app
+    environment:
+      - NODE_ENV=test
+    command: sh -c "npm install && npm lint"

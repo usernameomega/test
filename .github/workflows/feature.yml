@@ -1,0 +1,11 @@
+name: Feature ✨
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  test:
+    uses: ./.github/workflows/feature-tpl.yml
