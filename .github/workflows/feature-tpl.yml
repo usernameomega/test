@@ -11,27 +11,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Manual Trivy Setup
-        uses: aquasecurity/setup-trivy@v0.2.0
-        with:
-          cache: true
-          version: v0.57.1
-
-      - name: Run Trivy vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          ignore-unfixed: true
-          format: 'json'
-          output: 'trivy-results.json'
-          severity: 'CRITICAL'
-          skip-setup-trivy: true
-
-      - name: Output Trivy results to console
-        run: cat trivy-results.json
-
-      - name: Output Trivy results as a table
+      - name: Extract branch name
+        id: extract-branch
         run: |
-          echo "Vulnerability ID | Package | Severity | Description"
-          echo "---------------- | ------- | -------- | -----------"
-          jq -r '.Results[].Vulnerabilities[]? | [.VulnerabilityID, .PkgName, .Severity, .Description] | @tsv' trivy-results.json | column -t -s $'\t'
+          BRANCH_NAME=$(echo $GITHUB_REF | awk -F/ '{print $3}')
+          echo "Branch name is $BRANCH_NAME"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Use branch name
+        run: |
+          echo "The branch name is $BRANCH_NAME"
