@@ -4,18 +4,21 @@ on:
   workflow_call:
 
 jobs:
-  test:
+  tests:
     name: Test Application 🔬
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      # Шаг 1: Проверка кода
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Шаг 2: Установка Docker и Docker Compose
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
+#      - name: Set up Docker
+#        uses: docker/setup-buildx-action@v2
+#
+#      - name: Run tests with Docker Compose
+#        run: docker compose up --abort-on-container-exit
 
-      # Шаг 3: Запуск Docker Compose для тестов
-      - name: Run tests with Docker Compose
-        run: docker compose up --abort-on-container-exit
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@<action version> # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
+        env:
+          SONAR_HOST_URL: https://sonarqube.pub.mng.hashgraph-group.com/
+          SONAR_TOKEN: squ_e33ae502ecd352c3bc10e03d41948d2c3de5c996
