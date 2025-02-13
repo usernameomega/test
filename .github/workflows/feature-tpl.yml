@@ -22,3 +22,7 @@ jobs:
         env:
           SONAR_HOST_URL: https://sonarqube.pub.mng.hashgraph-group.com/
           SONAR_TOKEN: squ_e33ae502ecd352c3bc10e03d41948d2c3de5c996
+        with:
+          args: >
+            -Dsonar.projectKey=test_project_key
+            -Dsonar.projectName=Test project
