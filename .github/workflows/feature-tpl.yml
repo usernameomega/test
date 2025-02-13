@@ -26,3 +26,6 @@ jobs:
           output: 'trivy-results.sarif'
           severity: 'CRITICAL'
           skip-setup-trivy: true
+
+      - name: Output Trivy results to console
+        run: cat trivy-results.sarif
