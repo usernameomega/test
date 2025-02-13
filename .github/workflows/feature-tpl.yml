@@ -8,13 +8,14 @@ jobs:
     name: Test Application 🔬
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
+      # Шаг 1: Проверка кода
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Run Tests 🧪
-        uses: isbang/compose-action@v2.0.0
-        with:
-          compose-file: "./docker-compose.yml"
-          down-flags: "--volumes"
-          services: |
-            test
+      # Шаг 2: Установка Docker и Docker Compose
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      # Шаг 3: Запуск Docker Compose для тестов
+      - name: Run tests with Docker Compose
+        run: docker-compose up --abort-on-container-exit
