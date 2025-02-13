@@ -18,7 +18,7 @@ jobs:
 #        run: docker compose up --abort-on-container-exit
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@<action version> # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
+        uses: SonarSource/sonarqube-scan-action@v4.2.1 # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
         env:
           SONAR_HOST_URL: https://sonarqube.pub.mng.hashgraph-group.com/
           SONAR_TOKEN: squ_e33ae502ecd352c3bc10e03d41948d2c3de5c996
