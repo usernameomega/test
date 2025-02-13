@@ -27,5 +27,8 @@ jobs:
           severity: 'CRITICAL'
           skip-setup-trivy: true
 
-      - name: Output Trivy results to console
-        run: cat trivy-results.sarif
+      - name: Output Trivy results as a table
+        run: |
+          echo "Vulnerability ID | Package | Severity | Description"
+          echo "---------------- | ------- | -------- | -----------"
+          jq -r '.Results[].Vulnerabilities[]? | [.VulnerabilityID, .PkgName, .Severity, .Description] | @tsv' trivy-results.json | column -t -s $'\t'
