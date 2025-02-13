@@ -25,4 +25,4 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=test_project_key
-            -Dsonar.projectName=Test project
+            -Dsonar.projectName=Test
