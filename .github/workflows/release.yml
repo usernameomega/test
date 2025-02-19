@@ -31,7 +31,6 @@ jobs:
           release_name: Release v${{ steps.get_version.outputs.version || '1.0.0' }}
           draft: false
           prerelease: false
-          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}  # Токен для доступа к GitHub API
 
