@@ -3,7 +3,7 @@ name: Feature ✨
 on:
   push:
     branches:
-      - main
+      - main1
 
 jobs:
 
